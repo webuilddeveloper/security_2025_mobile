@@ -55,7 +55,7 @@ class _NewsForm extends State<NewsForm> {
   @override
   void initState() {
     setState(() {
-      _limit = 10;
+      _limit = 20;
     });
 
     comment = Comment(
