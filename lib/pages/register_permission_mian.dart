@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:security_2025_mobile_v3/register_permission.dart';
+import 'package:security_2025_mobile_v3/pages/register_permission.dart';
 
 class mainPermission extends StatefulWidget {
   const mainPermission({super.key});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:security_2025_mobile_v3/pages/register_permission_detail.dart';
 import 'package:security_2025_mobile_v3/widget/text_form_field.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as dt_picker;
@@ -395,8 +396,28 @@ class _RegisterPermissionState extends State<RegisterPermission>
                   children: [
                     GestureDetector(
                       onTap: () {
-                        showPaymentDialog(context);
-                        print('----------------');
+                        // showPaymentDialog(context);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => registerPermissionDetail(
+                              firstName: txtFirstName.text,
+                              lastName: txtLastName.text,
+                              phone: txtPhone.text,
+                              birthDate: txtDate.text,
+                              houseNo: txtHouseNo.text,
+                              village: txtVillage.text,
+                              road: txtRoad.text,
+                              subDistrict: txtSubDistrict.text,
+                              district: txtDistrict.text,
+                              province: txtProvince.text,
+                              postalCode: txtPostalCode.text,
+                              type: getTitle(),
+                              uploadedFiles: fileCategories,
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         height: 50,
@@ -822,336 +843,6 @@ class _RegisterPermissionState extends State<RegisterPermission>
                   color: Colors.black87,
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void showPaymentDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(24.0),
-            constraints: BoxConstraints(maxWidth: 400),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Header
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Color(0XFFB03432).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.qr_code_2,
-                        color: Color(0XFFB03432),
-                        size: 28,
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                    Text(
-                      'ชำระเงิน',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24),
-
-                // Content
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'โปรดสแกน QR Code เพื่อชำระเงิน',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[800],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 24),
-                      Container(
-                        padding: EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.qr_code_2_outlined,
-                          size: 120,
-                          color: Color(0XFFB03432),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-
-                // Notice Text
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Color(0XFFB03432).withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Color(0XFFB03432).withOpacity(0.1),
-                    ),
-                  ),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[800],
-                        height: 1.5,
-                      ),
-                      children: [
-                        TextSpan(
-                          text:
-                              'หลังจากชำระเงินแล้ว นายทะเบียนต้องแจ้งคำสั่งอนุญาตหรือไม่อนุญาต ให้ผู้ยื่นคำขอ',
-                        ),
-                        TextSpan(
-                          text: 'ทราบภายในหกสิบวันนับแต่วันที่ได้รับคำขอ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0XFFB03432),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24),
-
-                // Action Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: TextButton.styleFrom(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      ),
-                      child: Text(
-                        'ยกเลิก',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        showPaymentSuccessDialog(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0XFFB03432),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        'ยืนยันการชำระเงิน',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void showPaymentSuccessDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // ป้องกันการกดพื้นหลังเพื่อปิด
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(24.0),
-            constraints: BoxConstraints(maxWidth: 400),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Success Icon
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.verified_outlined,
-                    color: Colors.green,
-                    size: 80,
-                  ),
-                ),
-                SizedBox(height: 24),
-
-                // Success Title
-                Text(
-                  'ชำระเงินสำเร็จ',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green[700],
-                  ),
-                ),
-                SizedBox(height: 16),
-
-                // Success Message
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'ระบบได้รับการชำระเงินของท่านเรียบร้อยแล้ว',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'เจ้าหน้าที่จะดำเนินการตรวจสอบและแจ้งผลภายใน 60 วัน',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 24),
-
-                // Transaction Details
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.blue.withOpacity(0.1),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildTransactionDetail(
-                        'เลขที่รายการ:',
-                        'TXN1234567890',
-                      ),
-                      _buildTransactionDetail(
-                        'วันที่ชำระ:',
-                        '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                      ),
-                      _buildTransactionDetail(
-                        'เวลา:',
-                        '${DateTime.now().hour}:${DateTime.now().minute} น.',
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 24),
-
-                // Close Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'ตกลง',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-// Helper widget for transaction details
-  Widget _buildTransactionDetail(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
             ),
           ),
         ],
