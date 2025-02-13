@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:security_2025_mobile_v3/check_security_license.dart';
 import 'package:security_2025_mobile_v3/component/carousel_rotation.dart';
 import 'package:security_2025_mobile_v3/component/material/check_avatar.dart';
 import 'package:security_2025_mobile_v3/component/menu/build_verify_ticket.dart';
@@ -33,6 +35,8 @@ import 'package:security_2025_mobile_v3/pages/contact/contact_list_category.dart
 import 'package:security_2025_mobile_v3/pages/news/news_list.dart';
 import 'package:security_2025_mobile_v3/pages/privilege/privilege_main.dart';
 import 'package:security_2025_mobile_v3/pages/profile/user_information.dart';
+import 'package:security_2025_mobile_v3/register_permission.dart';
+import 'package:security_2025_mobile_v3/register_permission_mian.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart';
 import 'package:security_2025_mobile_v3/component/carousel_form.dart';
 import 'pages/event_calendar/event_calendar_main.dart';
@@ -1056,7 +1060,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ComingSoon(),
+                      builder: (context) => SecurityLicense(),
                     ),
                   );
                 },
@@ -1068,7 +1072,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ComingSoon(),
+                      builder: (context) => mainPermission(),
                     ),
                   );
                 },

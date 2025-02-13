@@ -249,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          new RegisterPage(
+                                          RegisterPage(
                                         username: "",
                                         password: "",
                                         facebookID: "",
@@ -358,8 +358,7 @@ class _LoginPageState extends State<LoginPage> {
                                           : userEmail,
                                       "email": userEmail,
                                       "imageUrl": obj.userProfile?.pictureUrl,
-                                      "firstName":
-                                          obj.userProfile?.displayName,
+                                      "firstName": obj.userProfile?.displayName,
                                       "lastName": '',
                                       "lineID": obj.userProfile?.userId
                                     };
@@ -383,7 +382,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       ),
                                     );
-                                                                                                      },
+                                  },
                                   icon: Image.asset(
                                     "assets/logo/socials/Group381.png",
                                   ),
@@ -705,7 +704,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-    }
+  }
 
   _loginFacebook() async {
     var obj = await signInWithFacebook();
@@ -745,7 +744,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       );
-        }
+    }
   }
 
   _loginGoogle() async {
@@ -789,5 +788,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-      }
+  }
 }
