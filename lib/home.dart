@@ -35,13 +35,13 @@ import 'package:security_2025_mobile_v3/pages/contact/contact_list_category.dart
 import 'package:security_2025_mobile_v3/pages/news/news_list.dart';
 import 'package:security_2025_mobile_v3/pages/privilege/privilege_main.dart';
 import 'package:security_2025_mobile_v3/pages/profile/user_information.dart';
-import 'package:security_2025_mobile_v3/pages/register_permission.dart';
 import 'package:security_2025_mobile_v3/pages/register_permission_mian.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart';
 import 'package:security_2025_mobile_v3/component/carousel_form.dart';
 import 'pages/event_calendar/event_calendar_main.dart';
 import 'pages/knowledge/knowledge_list.dart';
 import 'pages/main_popup/dialog_main_popup.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.changePage}) : super(key: key);
@@ -2047,21 +2047,83 @@ class _HomePageState extends State<HomePage> {
     _refreshController.loadComplete();
   }
 
-  _getLocation() async {
-    print('currentLocation');
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
+  // _getLocation() async {
+  //   print('currentLocation');
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.best);
 
-    // print('------ Position -----' + position.toString());
+  //   // print('------ Position -----' + position.toString());
 
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    // print('----------' + placemarks.toString());
+  //   List<Placemark> placemarks =
+  //       await placemarkFromCoordinates(position.latitude, position.longitude);
+  //   // print('----------' + placemarks.toString());
 
-    setState(() {
-      latLng = LatLng(position.latitude, position.longitude);
-      currentLocation = placemarks.first.administrativeArea!;
-    });
+  //   setState(() {
+  //     latLng = LatLng(position.latitude, position.longitude);
+  //     currentLocation = placemarks.first.administrativeArea!;
+  //   });
+  // }
+
+  Future<void> _getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    print('🔍 กำลังตรวจสอบสิทธิ์ GPS...');
+
+    // ✅ 1. เช็คว่า GPS เปิดอยู่หรือไม่
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print("❌ กรุณาเปิด GPS ก่อนใช้งาน");
+      return;
+    }
+
+    // ✅ 2. ตรวจสอบสิทธิ์ GPS
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print("❌ ผู้ใช้ปฏิเสธสิทธิ์ Location");
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      print("❌ ผู้ใช้ปฏิเสธถาวร ต้องไปเปิดที่ Settings");
+      openAppSettings(); // เปิดหน้า Settings ให้ผู้ใช้
+      return;
+    }
+
+    try {
+      // ✅ 3. ดึงพิกัดปัจจุบัน
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      );
+
+      print("📍 พิกัดที่ได้: ${position.latitude}, ${position.longitude}");
+
+      // ✅ 4. แปลงพิกัดเป็นชื่อสถานที่
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        print("🏙️ ตำแหน่ง: ${place.administrativeArea}, ${place.country}");
+
+        setState(() {
+          latLng = LatLng(position.latitude, position.longitude);
+          currentLocation = (placemarks.isNotEmpty &&
+                  placemarks.first.administrativeArea != null)
+              ? placemarks.first.administrativeArea!
+              : "ไม่ทราบที่อยู่";
+        });
+      } else {
+        print("❌ ไม่พบข้อมูลสถานที่จากพิกัดนี้");
+      }
+    } catch (e) {
+      print("❌ เกิดข้อผิดพลาด: $e");
+    }
   }
 
   // mainFooter() {

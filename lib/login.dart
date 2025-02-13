@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:security_2025_mobile_v3/menu.dart';
+import 'package:security_2025_mobile_v3/pages/login_phone.dart';
 import 'package:security_2025_mobile_v3/shared/line.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -385,6 +386,24 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                   icon: Image.asset(
                                     "assets/logo/socials/Group381.png",
+                                  ),
+                                  padding: EdgeInsets.all(5.0),
+                                ),
+                              ),
+                              Container(
+                                alignment: FractionalOffset(0.5, 0.5),
+                                height: 50.0,
+                                width: 50.0,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginPhone()));
+                                  },
+                                  icon: Image.asset(
+                                    "assets/logo/phone.png",
                                   ),
                                   padding: EdgeInsets.all(5.0),
                                 ),
