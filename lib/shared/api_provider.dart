@@ -12,7 +12,7 @@ import 'package:security_2025_mobile_v3/models/user.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:io';
 
-const appName = 'Smart Security';
+const appName = 'GuardPass';
 const versionName = '0.0.1';
 const versionNumber = 1;
 
