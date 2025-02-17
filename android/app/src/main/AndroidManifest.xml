@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="security_2025_mobile_v3"
+        android:label="GuardPass"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

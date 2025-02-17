@@ -1,4 +1,4 @@
-package com.example.security_2025_mobile_v3
+package td.webuild.security
 
 import io.flutter.embedding.android.FlutterActivity
 
