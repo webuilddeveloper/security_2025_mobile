@@ -41,12 +41,22 @@ class registerPermissionDetail extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text('สรุปรายการ', style: TextStyle(color: Colors.white)),
+        title: Center(
+            child: Text('สรุปรายการ', style: TextStyle(color: Colors.white))),
         backgroundColor: const Color(0XFFB03432),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

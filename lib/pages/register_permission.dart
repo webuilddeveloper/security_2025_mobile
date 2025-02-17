@@ -187,10 +187,21 @@ class _RegisterPermissionState extends State<RegisterPermission>
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          getTitle(),
-          style: TextStyle(color: Colors.white),
+        title: Center(
+          child: Text(
+            getTitle(),
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
         backgroundColor: const Color(0XFFB03432),
       ),
       body: SingleChildScrollView(

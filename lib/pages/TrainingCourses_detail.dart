@@ -46,10 +46,21 @@ class _TrainingCoursesDetailState extends State<TrainingCoursesDetail> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'รายละเอียดหลักสูตรการอบรม',
-          style: TextStyle(color: Colors.white),
+        title: Center(
+          child: Text(
+            'รายละเอียดหลักสูตรการอบรม',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
         backgroundColor: const Color(0XFFB03432),
       ),
       body: ScrollConfiguration(

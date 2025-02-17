@@ -168,7 +168,6 @@ textFormField(
         fontSize: 10.0,
       ),
     ),
-
     controller: model,
     enabled: enabled,
   );
@@ -679,5 +678,39 @@ textFormIdCardFieldEdit(
     },
     controller: model,
     enabled: enabled,
+  );
+}
+
+dropdownSelect(
+  String? selectedItem,
+  Function(String?)? onChanged,
+  String hintText,
+  bool enabled,
+  List<Map<String, String>> items,
+) {
+  return DropdownButtonFormField<String>(
+    decoration: InputDecoration(
+      filled: true,
+      fillColor: enabled ? Color(0xFFC5DAFC) : Color(0xFF707070),
+      contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+      hintText: hintText,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide.none,
+      ),
+    ),
+    value: selectedItem,
+    onChanged: enabled
+        ? (String? newValue) {
+            // เรียกใช้ setState ภายในฟังก์ชัน onChanged
+            onChanged?.call(newValue);
+          }
+        : null,
+    items: items.map((Map<String, String> item) {
+      return DropdownMenuItem<String>(
+        value: item['id'],
+        child: Text(item['name']!),
+      );
+    }).toList(),
   );
 }

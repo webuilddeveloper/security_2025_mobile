@@ -75,7 +75,32 @@ class _KnowledgeList extends State<KnowledgeList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: header(context, goBack, title: 'คลังความรู้', rightButton: null),
+      // appBar: header(context, goBack, title: 'คลังความรู้', rightButton: null),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Center(
+          child: Text(
+            'คลังความรู้',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        backgroundColor: const Color(0XFFB03432),
+      ),
       body: new GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());

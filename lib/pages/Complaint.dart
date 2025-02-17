@@ -1,155 +1,10 @@
-// import 'package:flutter/material.dart';
-
-// class Complaint extends StatefulWidget {
-//   const Complaint({super.key});
-
-//   @override
-//   State<Complaint> createState() => _ComplaintState();
-// }
-
-// class _ComplaintState extends State<Complaint> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         leading: IconButton(
-//           icon: const Icon(Icons.arrow_back),
-//           color: Colors.white,
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//         ),
-//         title: Text(
-//           'รับเรื่องร้องเรียน',
-//           style: TextStyle(color: Colors.white),
-//         ),
-//         backgroundColor: const Color(0XFFB03432),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           children: [
-//             Container(
-//               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//               decoration: BoxDecoration(
-//                 gradient: LinearGradient(
-//                   begin: Alignment.topLeft,
-//                   end: Alignment.bottomRight,
-//                   colors: [
-//                     const Color(0XFFB03432),
-//                     const Color(0XFFB03432).withOpacity(0.9),
-//                   ],
-//                 ),
-//                 borderRadius: BorderRadius.circular(16),
-//                 boxShadow: [
-//                   BoxShadow(
-//                     color: const Color(0XFFB03432).withOpacity(0.25),
-//                     blurRadius: 10,
-//                     offset: const Offset(0, 4),
-//                   ),
-//                 ],
-//               ),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 children: [
-//                   // Logo Container
-//                   Container(
-//                     height: 52,
-//                     width: 52,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(12),
-//                       color: Colors.white,
-//                       boxShadow: [
-//                         BoxShadow(
-//                           color: const Color(0XFFB03432).withOpacity(0.15),
-//                           blurRadius: 8,
-//                           spreadRadius: 1,
-//                           offset: const Offset(0, 2),
-//                         ),
-//                       ],
-//                     ),
-//                     child: ClipRRect(
-//                       borderRadius: BorderRadius.circular(12),
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(10.0),
-//                         child: Image.asset(
-//                           'assets/logo/logo.png',
-//                           fit: BoxFit.contain,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(width: 16),
-//                   Expanded(
-//                     child: Row(
-//                       children: [
-//                         const Text(
-//                           'เรื่องร้องเรียน',
-//                           style: TextStyle(
-//                             color: Colors.white,
-//                             fontSize: 18,
-//                             fontWeight: FontWeight.w600,
-//                             letterSpacing: 0.3,
-//                           ),
-//                         ),
-//                         const SizedBox(width: 8),
-//                         Container(
-//                           padding: const EdgeInsets.symmetric(
-//                               horizontal: 8, vertical: 4),
-//                           decoration: BoxDecoration(
-//                             color: Colors.white.withOpacity(0.15),
-//                             borderRadius: BorderRadius.circular(12),
-//                             border: Border.all(
-//                               color: Colors.white.withOpacity(0.2),
-//                               width: 1,
-//                             ),
-//                           ),
-//                           child: const Text(
-//                             '3', // หรือใช้ตัวแปรจำนวนเรื่องร้องเรียน
-//                             style: TextStyle(
-//                               color: Colors.white,
-//                               fontSize: 14,
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-
-//                   // Arrow with circle background
-//                   Container(
-//                     height: 32,
-//                     width: 32,
-//                     decoration: BoxDecoration(
-//                       color: Colors.white.withOpacity(0.15),
-//                       borderRadius: BorderRadius.circular(10),
-//                       border: Border.all(
-//                         color: Colors.white.withOpacity(0.2),
-//                         width: 1,
-//                       ),
-//                     ),
-//                     child: const Center(
-//                       child: Icon(
-//                         Icons.arrow_forward_ios_rounded,
-//                         color: Colors.white,
-//                         size: 18,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:security_2025_mobile_v3/pages/blank_page/toast_fail.dart';
+import 'package:security_2025_mobile_v3/shared/api_provider.dart';
+import 'package:security_2025_mobile_v3/widget/text_form_field.dart';
 
 class ComplaintForm extends StatefulWidget {
   @override
@@ -157,155 +12,496 @@ class ComplaintForm extends StatefulWidget {
 }
 
 class _ComplaintFormState extends State<ComplaintForm> {
-  final _formKey = GlobalKey<FormState>();
-  String? _title;
-  String? _description;
-  List<XFile> _images = [];
-  final ImagePicker _picker = ImagePicker();
+  final txtheading = TextEditingController();
+  final txthour = TextEditingController();
+  final txtminute = TextEditingController();
 
-  Future<void> _pickImages() async {
-    final List<XFile>? selectedImages = await _picker.pickMultiImage();
-    if (selectedImages != null) {
+  late XFile _image;
+  bool showLoadingImage = false;
+  List<String> _itemImage = [];
+
+  String? selectedItem;
+
+  final List<Map<String, String>> mockItems = [
+    {'id': '1', 'name': 'พฤติกรรมและมารยาท'},
+    {'id': '2', 'name': 'การปฏิบัติหน้าที่'},
+    {'id': '3', 'name': 'ความปลอดภัย'},
+    {'id': '4', 'name': 'การใช้ตำแหน่งโดยมิชอบ'},
+    {'id': '5', 'name': ' อุปกรณ์และเครื่องแบบ'},
+    {'id': '6', 'name': ' อื่นๆ'},
+  ];
+  void _showPickerImage(context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                  leading: new Icon(Icons.photo_library),
+                  title: new Text(
+                    'อัลบั้มรูปภาพ',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Sarabun',
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onTap: () {
+                    _imgFromGallery();
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text(
+                    'กล้องถ่ายรูป',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Sarabun',
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onTap: () {
+                    _imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _imgFromCamera() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image!;
+    });
+    _upload();
+  }
+
+  _imgFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image!;
+    });
+    _upload();
+  }
+
+  deleteImage(String code) async {
+    setState(() {
+      _itemImage.removeWhere((c) => c == code);
+    });
+  }
+
+  void _upload() async {
+    var id = new DateTime.now().millisecondsSinceEpoch;
+    setState(() {
+      showLoadingImage = true;
+    });
+    uploadImage(_image).then((res) {
       setState(() {
-        _images.addAll(selectedImages);
+        showLoadingImage = false;
+        _itemImage.add(res);
       });
-    }
+      // setState(() {
+      //   _imageUrl = res;
+      // });
+    }).catchError((err) {
+      setState(() {
+        showLoadingImage = false;
+      });
+      print(err);
+    });
+  }
+
+  Future<String> uploadImage(XFile file) async {
+    Dio dio = new Dio();
+
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      "ImageCaption": "flutter",
+      "Image": await MultipartFile.fromFile(file.path, filename: fileName),
+    });
+
+    var response = await dio.post(serverUpload, data: formData);
+
+    return response.data['imageUrl'];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('แบบฟอร์มร้องเรียน'),
-        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Center(
+          child: Text(
+            'ร้องเรียน',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        backgroundColor: const Color(0XFFB03432),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'กรุณากรอกรายละเอียดการร้องเรียน',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              labelTextFormField('* หัวข้อเรื่องร้องเรียน'),
+              textFormField(
+                txtheading,
+                null,
+                'หัวข้อเรื่องร้องเรียน',
+                'หัวข้อเรื่องร้องเรียน',
+                true,
+                false,
+                false,
+              ),
+              labelTextFormField('* ผู้ถูกร้องเรียน'),
+              textFormField(
+                txtheading,
+                null,
+                'ผู้ถูกร้องเรียน',
+                'ผู้ถูกร้องเรียน',
+                true,
+                false,
+                false,
+              ),
+              labelTextFormField('* ช่วงเวลาที่เกิดเหตุ'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          color: true ? Color(0xFF000070) : Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Sarabun',
+                          fontSize: 15.00,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor:
+                              true ? Color(0xFFC5DAFC) : Color(0xFF707070),
+                          contentPadding:
+                              EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                          hintText: 'ชั่วโมง',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          errorStyle: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Sarabun',
+                            fontSize: 10.0,
+                          ),
+                        ),
+                        controller: txthour,
+                        enabled: true,
+                      ),
+                    ),
+                    Text(' : '),
+                    Expanded(
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          color: true ? Color(0xFF000070) : Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Sarabun',
+                          fontSize: 15.00,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor:
+                              true ? Color(0xFFC5DAFC) : Color(0xFF707070),
+                          contentPadding:
+                              EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                          hintText: 'นาที',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          errorStyle: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Sarabun',
+                            fontSize: 10.0,
+                          ),
+                        ),
+                        controller: txtminute,
+                        enabled: true,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'หัวข้อร้องเรียน',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'กรุณากรอกหัวข้อร้องเรียน';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _title = value,
+              labelTextFormField('* เลือกหัวข้อร้องเรียน'),
+              dropdownSelect(selectedItem, (String? newValue) {
+                setState(() {
+                  selectedItem = newValue;
+                });
+              }, 'เลือกหัวข้อร้องเรียน', true, mockItems),
+              SizedBox(height: 10),
+              selectedItem == '6'
+                  ? textFormField(
+                      txtheading,
+                      null,
+                      'เรื่องร้องเรียน',
+                      'เรื่องร้องเรียน',
+                      true,
+                      false,
+                      false,
+                    )
+                  : SizedBox(),
+              labelTextFormField('* รายละเอียดข้อมูลร้องเรียน'),
+              textFormField(
+                txtheading,
+                null,
+                'รายละเอียดข้อมูลร้องเรียน',
+                'รายละเอียดข้อมูลร้องเรียน',
+                true,
+                false,
+                false,
               ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'รายละเอียด',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                ),
-                maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'กรุณากรอกรายละเอียด';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _description = value,
+              labelTextFormField('* สิ่งที่ต้องการให้แก้ไข '),
+              textFormField(
+                txtheading,
+                null,
+                'สิ่งที่ต้องการให้แก้ไข',
+                'สิ่งที่ต้องการให้แก้ไข',
+                true,
+                false,
+                false,
               ),
-              SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: _pickImages,
-                icon: Icon(Icons.photo_camera),
-                label: Text('เพิ่มรูปภาพ'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'เพิ่มรูปภาพ',
+                            style: TextStyle(
+                              fontSize: 20.00,
+                              fontFamily: 'Sarabun',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'หลักฐานที่ต้องแนบได้แก่ ภาพถ่ายรถของท่านที่ปรากฏทะเบียนอย่างชัดเจน และหรือใบสั่ง',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                              fontFamily: 'Sarabun',
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Text(
+                            '(สามารถแนบรูปภาพได้สูงสุด 3 ภาพ)',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                              fontFamily: 'Sarabun',
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          width: 40.0,
+                          height: 40.0,
+                          decoration: BoxDecoration(
+                            color: Color(0XFFB03432),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              if (_itemImage.length < 3) {
+                                _showPickerImage(context);
+                              } else {
+                                return toastFail(context,
+                                    text:
+                                        'สามารถอัพโหลดรูปภาพได้ไม่เกิน 3 รูป');
+                              }
+                            },
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 3),
+                            child: Image.asset(
+                              'assets/logo/icons/picture.png',
+                              // height: 14.0,
+                              width: 20.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 16),
-              if (_images.isNotEmpty) ...[
-                Text(
-                  'รูปภาพที่แนบ (${_images.length})',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
+              if (_itemImage.length > 0)
                 Container(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _images.length,
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1 / 1,
+                    ),
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _itemImage.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Stack(
-                          children: [
-                            Image.network(
-                              _images[index].path,
-                              height: 100,
-                              width: 100,
+                      return Container(
+                        margin: EdgeInsets.only(top: 5.0),
+                        width: 400,
+                        child: MaterialButton(
+                          onPressed: () {
+                            dialogDeleteImage(_itemImage[index]);
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              _itemImage[index],
                               fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            (loadingProgress
+                                                    .expectedTotalBytes ??
+                                                1)
+                                        : null,
+                                  ),
+                                );
+                              },
                             ),
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: IconButton(
-                                icon: Icon(Icons.close, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _images.removeAt(index);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
-              ],
-              SizedBox(height: 24),
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // TODO: ส่งข้อมูลไปยัง API
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('ส่งข้อร้องเรียนเรียบร้อยแล้ว')),
-                      );
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                      'ส่งข้อร้องเรียน',
-                      style: TextStyle(fontSize: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      decoration: BoxDecoration(
+                        color: Color(0XFFB03432),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                          child: Text(
+                        'บันทึกข้อมูล',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Sarabun',
+                            fontSize: 16),
+                      )),
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  dialogDeleteImage(String code) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => new CupertinoAlertDialog(
+        title: new Text(
+          'ต้องการลบรูปภาพ ใช่ไหม',
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'Sarabun',
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        content: new Text(''),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: new Text(
+              "ยกเลิก",
+              style: TextStyle(
+                fontSize: 13,
+                fontFamily: 'Sarabun',
+                color: Color(0xFF005C9E),
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: new Text(
+              "ลบ",
+              style: TextStyle(
+                fontSize: 13,
+                fontFamily: 'Sarabun',
+                color: Color(0xFFA9151D),
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            onPressed: () {
+              deleteImage(code);
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
     );
   }

@@ -228,10 +228,21 @@ class _SecurityLicenseState extends State<SecurityLicense>
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'ตรวจสอบใบอนุญาต',
-          style: TextStyle(color: Colors.white),
+        title: Center(
+          child: Text(
+            'ตรวจสอบใบอนุญาต',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
         backgroundColor: Color(0XFFB03432),
       ),
       body: SingleChildScrollView(

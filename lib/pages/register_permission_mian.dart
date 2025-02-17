@@ -36,10 +36,21 @@ class _mainPermissionState extends State<mainPermission>
             Navigator.pop(context);
           },
         ),
-        title: const Text(
-          'ลงทะเบียนแบบขออนุญาต',
-          style: TextStyle(color: Colors.white),
+        title: Center(
+          child: const Text(
+            'ลงทะเบียนแบบขออนุญาต',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
         backgroundColor: const Color(0XFFB03432),
       ),
       body: SingleChildScrollView(
