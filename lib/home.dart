@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:security_2025_mobile_v3/pages/Complaint.dart';
 import 'package:security_2025_mobile_v3/pages/check_security_license.dart';
 import 'package:security_2025_mobile_v3/component/carousel_rotation.dart';
 import 'package:security_2025_mobile_v3/component/material/check_avatar.dart';
@@ -15,6 +15,7 @@ import 'package:security_2025_mobile_v3/pages/coming_soon.dart';
 import 'package:security_2025_mobile_v3/pages/dispute_an_allegation.dart';
 import 'package:security_2025_mobile_v3/pages/news/news_form.dart';
 import 'package:security_2025_mobile_v3/pages/reporter/reporter_main.dart';
+import 'package:security_2025_mobile_v3/pages/training_courses.dart';
 import 'package:security_2025_mobile_v3/pages/warning/warning_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -1048,7 +1049,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ComingSoon(),
+                      builder: (context) => TrainingCourses(),
                     ),
                   );
                 },
@@ -1105,7 +1106,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ComingSoon(),
+                      builder: (context) => ComplaintForm(),
                     ),
                   );
                 },
