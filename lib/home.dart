@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:security_2025_mobile_v3/pages/Complaint.dart';
+import 'package:security_2025_mobile_v3/pages/check%20_information.dart';
 import 'package:security_2025_mobile_v3/pages/check_security_license.dart';
 import 'package:security_2025_mobile_v3/component/carousel_rotation.dart';
 import 'package:security_2025_mobile_v3/component/material/check_avatar.dart';
@@ -1061,7 +1062,8 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SecurityLicense(),
+                      // builder: (context) => SecurityLicense(),
+                      builder: (context) => VerifyStangPage(),
                     ),
                   );
                 },

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:security_2025_mobile_v3/component/material/check_avatar.dart';
+import 'package:security_2025_mobile_v3/pages/my_qr_code.dart';
+import 'package:security_2025_mobile_v3/qr_screen.dart';
 
 class SecurityLicense extends StatefulWidget {
-  const SecurityLicense({super.key});
+  SecurityLicense({super.key});
 
   @override
   State<SecurityLicense> createState() => _SecurityLicenseState();
@@ -13,9 +16,8 @@ class _SecurityLicenseState extends State<SecurityLicense>
   late AnimationController _controller;
   TextEditingController txtSearch = TextEditingController();
 
-  // ข้อมูลที่ถูกกรองจากการค้นหา
   List<Map<String, String>> filteredData = [];
-  int itemsToShow = 10; // เริ่มต้นแสดง 10 รายการ
+  int itemsToShow = 10;
 
   void initState() {
     super.initState();
@@ -39,7 +41,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
               item["license_number"]!.contains(query);
         }).toList();
       }
-      itemsToShow = 10; // รีเซ็ตจำนวนที่แสดงเมื่อค้นหา
+      itemsToShow = 10;
     });
   }
 
@@ -55,6 +57,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
 
   List<Map<String, String>> allData = [
     {
+      "id": "001",
       "name": "สมชาย ใจดี",
       "image": 'https://cdn-icons-png.flaticon.com/512/3361/3361201.png',
       "company": "บริษัท เอ บี ซี จำกัด",
@@ -65,6 +68,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
       "position": "พนักงานรักษาความปลอดภัย"
     },
     {
+      "id": "002",
       "name": "สุภาพร วัฒนกิจ",
       "image": "",
       "company": "บริษัท ดี อี เอฟ จำกัด",
@@ -75,6 +79,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
       "position": "พนักงานรักษาความปลอดภัย"
     },
     {
+      "id": "003",
       "name": "กิตติศักดิ์ มานะชัย",
       "image": "",
       "company": "บริษัท จี เอช ไอ จำกัด",
@@ -85,6 +90,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
       "position": "พนักงานรักษาความปลอดภัย"
     },
     {
+      "id": "004",
       "name": "วราภรณ์ นาคทอง",
       "image": "",
       "company": "บริษัท เค แอล เอ็ม จำกัด",
@@ -93,127 +99,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
       "issue_date": "2020-03-20",
       "expiry_date": "2025-03-20",
       "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "สมชาย ใจดี",
-      "image": 'https://cdn-icons-png.flaticon.com/512/3361/3361201.png',
-      "company": "บริษัท เอ บี ซี จำกัด",
-      "license_number": "1234567890",
-      "blood_type": "O",
-      "issue_date": "2023-01-15",
-      "expiry_date": "2028-01-15",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "สุภาพร วัฒนกิจ",
-      "image": "",
-      "company": "บริษัท ดี อี เอฟ จำกัด",
-      "license_number": "9876543210",
-      "blood_type": "A",
-      "issue_date": "2022-06-10",
-      "expiry_date": "2027-06-10",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "กิตติศักดิ์ มานะชัย",
-      "image": "",
-      "company": "บริษัท จี เอช ไอ จำกัด",
-      "license_number": "4561237890",
-      "blood_type": "B",
-      "issue_date": "2021-12-01",
-      "expiry_date": "2026-12-01",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "สมชาย ใจดี",
-      "image": 'https://cdn-icons-png.flaticon.com/512/3361/3361201.png',
-      "company": "บริษัท เอ บี ซี จำกัด",
-      "license_number": "1234567890",
-      "blood_type": "O",
-      "issue_date": "2023-01-15",
-      "expiry_date": "2028-01-15",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "สุภาพร วัฒนกิจ",
-      "image": "",
-      "company": "บริษัท ดี อี เอฟ จำกัด",
-      "license_number": "9876543210",
-      "blood_type": "A",
-      "issue_date": "2022-06-10",
-      "expiry_date": "2027-06-10",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "กิตติศักดิ์ มานะชัย",
-      "image": "",
-      "company": "บริษัท จี เอช ไอ จำกัด",
-      "license_number": "4561237890",
-      "blood_type": "B",
-      "issue_date": "2021-12-01",
-      "expiry_date": "2026-12-01",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "สมชาย ใจดี",
-      "image": 'https://cdn-icons-png.flaticon.com/512/3361/3361201.png',
-      "company": "บริษัท เอ บี ซี จำกัด",
-      "license_number": "1234567890",
-      "blood_type": "O",
-      "issue_date": "2023-01-15",
-      "expiry_date": "2028-01-15",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "สุภาพร วัฒนกิจ",
-      "image": "",
-      "company": "บริษัท ดี อี เอฟ จำกัด",
-      "license_number": "9876543210",
-      "blood_type": "A",
-      "issue_date": "2022-06-10",
-      "expiry_date": "2027-06-10",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "กิตติศักดิ์ มานะชัย",
-      "image": "",
-      "company": "บริษัท จี เอช ไอ จำกัด",
-      "license_number": "4561237890",
-      "blood_type": "B",
-      "issue_date": "2021-12-01",
-      "expiry_date": "2026-12-01",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
+    }
   ];
 
   @override
@@ -270,8 +156,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
                     fillColor: Colors.transparent,
                     hintText: 'ค้นหาจากชื่อ, บริษัท หรือเลขใบอนุญาต',
                     contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 10.0), // จัดให้ข้อความอยู่กลาง
+                        vertical: 10.0, horizontal: 10.0),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0XFFB03432),
@@ -283,7 +168,6 @@ class _SecurityLicenseState extends State<SecurityLicense>
                       ),
                     ),
                     prefixIcon: Padding(
-                      // ใช้ prefixIcon แทน
                       padding: EdgeInsets.all(10),
                       child: Image.asset(
                         'assets/images/search.png',
@@ -297,11 +181,15 @@ class _SecurityLicenseState extends State<SecurityLicense>
               ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
-                // itemCount: filteredData.length,
                 itemCount: itemsToShow,
                 itemBuilder: (context, index) {
                   if (index >= filteredData.length) return null;
                   var item = filteredData[index];
+                  final Uri qrUri = Uri(
+                      scheme: "http",
+                      host: "gateway.we-builds.com",
+                      path: "security_information.html",
+                      queryParameters: filteredData[index]);
 
                   return Column(
                     children: [
@@ -349,7 +237,6 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                           item["name"]!,
                                           style: TextStyle(
                                             fontSize: 20.0,
-                                            // color: Color(0XFF0C387D),
                                             color: Colors.white,
                                             fontFamily: 'Kanit',
                                             fontWeight: FontWeight.w400,
@@ -371,16 +258,16 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                 SizedBox(width: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    // widget.changePage(4);
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => MyQrCode(),
-                                    //   ),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            QrScreen(item: filteredData[index]),
+                                      ),
+                                    );
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(10.0),
+                                    padding: EdgeInsets.all(4.0),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(12),
@@ -389,10 +276,11 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Image.asset(
-                                          'assets/icons/qr_code.png',
-                                          height: 33,
-                                          color: Color(0XFFB03432),
+                                        QrImageView(
+                                          data: qrUri.toString(),
+                                          size: 50,
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: Color(0XFFB03432),
                                         ),
                                         Text(
                                           'สแกน',
@@ -414,18 +302,15 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                 text: 'ใบอนุญาตเลขที่ : ',
                                 style: TextStyle(
                                   fontSize: 15.0,
-                                  // color: Color(0XFF0C387D),
                                   color: Colors.white,
                                   fontFamily: 'Kanit',
                                   fontWeight: FontWeight.w400,
                                 ),
                                 children: [
                                   TextSpan(
-                                    // text: 'ชบ23110623',
                                     text: item["license_number"]!,
                                     style: TextStyle(
                                       fontSize: 15.0,
-                                      // color: Color(0XFF0C387D),
                                       color: Colors.white,
                                       fontFamily: 'Kanit',
                                       fontWeight: FontWeight.w300,
@@ -434,90 +319,90 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                 ],
                               ),
                             ),
-                            RichText(
-                              text: TextSpan(
-                                text: 'หมู่เลือด : ',
-                                style: TextStyle(
-                                  fontSize: 13.0,
-                                  // color: Color(0XFF0C387D),
-                                  color: Colors.white,
-                                  fontFamily: 'Kanit',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    // text: 'A',
-                                    text: item["blood_type"]!,
-                                    style: TextStyle(
-                                      fontSize: 13.0,
-                                      // color: Color(0XFF0C387D),
-                                      color: Colors.white,
-                                      fontFamily: 'Kanit',
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'วันออกบัตร : ',
-                                    style: TextStyle(
-                                      fontSize: 13.0,
-                                      // color: Color(0XFF0C387D),
-                                      color: Colors.white,
-                                      fontFamily: 'Kanit',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        // text: '02/01/2567',
-                                        text: item["issue_date"]!,
-                                        style: TextStyle(
-                                          fontSize: 13.0,
-                                          // color: Color(0XFF0C387D),
-                                          color: Colors.white,
-                                          fontFamily: 'Kanit',
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'วันหมดอายุ : ',
-                                    style: TextStyle(
-                                      fontSize: 13.0,
-                                      // color: Color(0XFF0C387D),
-                                      color: Colors.white,
-                                      fontFamily: 'Kanit',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        // text: '02/01/2570',
-                                        text: item["expiry_date"]!,
-                                        style: TextStyle(
-                                          fontSize: 13.0,
-                                          // color: Color(0XFF0C387D),
-                                          color: Colors.white,
-                                          fontFamily: 'Kanit',
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
+                            // RichText(
+                            //   text: TextSpan(
+                            //     text: 'หมู่เลือด : ',
+                            //     style: TextStyle(
+                            //       fontSize: 13.0,
+                            //       // color: Color(0XFF0C387D),
+                            //       color: Colors.white,
+                            //       fontFamily: 'Kanit',
+                            //       fontWeight: FontWeight.w400,
+                            //     ),
+                            //     children: [
+                            //       TextSpan(
+                            //         // text: 'A',
+                            //         text: item["blood_type"]!,
+                            //         style: TextStyle(
+                            //           fontSize: 13.0,
+                            //           // color: Color(0XFF0C387D),
+                            //           color: Colors.white,
+                            //           fontFamily: 'Kanit',
+                            //           fontWeight: FontWeight.w300,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     RichText(
+                            //       text: TextSpan(
+                            //         text: 'วันออกบัตร : ',
+                            //         style: TextStyle(
+                            //           fontSize: 13.0,
+                            //           // color: Color(0XFF0C387D),
+                            //           color: Colors.white,
+                            //           fontFamily: 'Kanit',
+                            //           fontWeight: FontWeight.w400,
+                            //         ),
+                            //         children: [
+                            //           TextSpan(
+                            //             // text: '02/01/2567',
+                            //             text: item["issue_date"]!,
+                            //             style: TextStyle(
+                            //               fontSize: 13.0,
+                            //               // color: Color(0XFF0C387D),
+                            //               color: Colors.white,
+                            //               fontFamily: 'Kanit',
+                            //               fontWeight: FontWeight.w300,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //     RichText(
+                            //       text: TextSpan(
+                            //         text: 'วันหมดอายุ : ',
+                            //         style: TextStyle(
+                            //           fontSize: 13.0,
+                            //           // color: Color(0XFF0C387D),
+                            //           color: Colors.white,
+                            //           fontFamily: 'Kanit',
+                            //           fontWeight: FontWeight.w400,
+                            //         ),
+                            //         children: [
+                            //           TextSpan(
+                            //             // text: '02/01/2570',
+                            //             text: item["expiry_date"]!,
+                            //             style: TextStyle(
+                            //               fontSize: 13.0,
+                            //               // color: Color(0XFF0C387D),
+                            //               color: Colors.white,
+                            //               fontFamily: 'Kanit',
+                            //               fontWeight: FontWeight.w300,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ],
+                            // )
                           ],
                         ),
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                     ],
                   );
                 },
@@ -528,7 +413,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
                 },
                 child: Container(
                   height: 50,
-                  width: MediaQuery.of(context).size.width - 10,
+                  width: MediaQuery.of(context).size.width / 1.3,
                   decoration: BoxDecoration(
                     color: Color(0XFFB03432),
                     borderRadius: BorderRadius.circular(10),
@@ -546,7 +431,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 50),
             ],
           ),
         ),
