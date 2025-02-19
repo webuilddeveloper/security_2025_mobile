@@ -122,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _selectedYear = now.year;
       _selectedMonth = now.month;
       _selectedDay = now.day;
-      // _username = widget.username;
+      _username = widget.username;
       // _password = widget.password;
       // _facebookID = widget.facebookID;
       // _appleID = widget.appleID;

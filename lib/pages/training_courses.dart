@@ -12,6 +12,7 @@ class TrainingCourses extends StatefulWidget {
 class _TrainingCoursesState extends State<TrainingCourses> {
   TextEditingController txtSearch = TextEditingController();
   List<Map<String, String>> filteredData = [];
+
   void initState() {
     super.initState();
 
@@ -106,55 +107,40 @@ class _TrainingCoursesState extends State<TrainingCourses> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              height: 45.0,
-              width: MediaQuery.of(context).size.width - 10,
-              child: TextField(
-                autofocus: false,
-                cursorColor: Color(0XFFB03432),
-                controller: txtSearch,
-                onChanged: searchData,
-                keyboardType: TextInputType.multiline,
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'Sarabun',
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0XFFB03432),
+                  Color(0XFFB03432),
+                ],
+              ),
+            ),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 20),
+            child: TextField(
+              controller: txtSearch,
+              onChanged: searchData,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.2),
+                hintText: 'ค้นหาจากชื่อบริษัท',
+                hintStyle: TextStyle(color: Colors.white70),
+                prefixIcon: Icon(Icons.search, color: Colors.white),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
                 ),
-                textAlign: TextAlign.left,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.transparent,
-                  hintText: 'ค้นหาหลักสูคร',
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 10.0), // จัดให้ข้อความอยู่กลาง
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0XFFB03432),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0XFFB03432),
-                    ),
-                  ),
-                  prefixIcon: Padding(
-                    // ใช้ prefixIcon แทน
-                    padding: EdgeInsets.all(10),
-                    child: Image.asset(
-                      'assets/images/search.png',
-                      color: Color(0XFFB03432),
-                    ),
-                  ),
-                ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

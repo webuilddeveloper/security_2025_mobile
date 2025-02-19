@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:security_2025_mobile_v3/component/header.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TrainingCoursesDetail extends StatefulWidget {
@@ -101,7 +100,6 @@ class _TrainingCoursesDetailState extends State<TrainingCoursesDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // หัวข้อและคำอธิบาย
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
