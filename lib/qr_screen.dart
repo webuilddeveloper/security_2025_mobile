@@ -133,13 +133,31 @@ class _QrScreen extends State<QrScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // Container(
+                      //   height: 80,
+                      //   width: 80,
+                      //   child: checkAvatar(
+                      //     context,
+                      //     item['image'],
+                      //   ),
+                      // ),
                       Container(
-                        height: 80,
-                        width: 80,
-                        child: checkAvatar(
-                          context,
-                          item['image'],
-                        ),
+                        height: 85,
+                        width: 85,
+                        padding: EdgeInsets.only(right: 10),
+                        child: item["image"] != ''
+                            ? CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: AssetImage(
+                                    item["image"]!), // Use AssetImage
+                              )
+                            : Container(
+                                padding: EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/user_not_found.png',
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                              ),
                       ),
                       SizedBox(height: 10),
                       Text(

@@ -59,7 +59,7 @@ class _SecurityLicenseState extends State<SecurityLicense>
     {
       "id": "001",
       "name": "สมชาย ใจดี",
-      "image": 'https://cdn-icons-png.flaticon.com/512/3361/3361201.png',
+      "image": 'assets/รปภ1.jpg',
       "company": "บริษัท เอ บี ซี จำกัด",
       "license_number": "1234567890",
       "blood_type": "O",
@@ -69,134 +69,13 @@ class _SecurityLicenseState extends State<SecurityLicense>
     },
     {
       "id": "002",
-      "name": "สุภาพร วัฒนกิจ",
-      "image": "",
+      "name": "นายสมทุย ลุยสวน ",
+      "image": "assets/รปภ2.jpg",
       "company": "บริษัท ดี อี เอฟ จำกัด",
       "license_number": "9876543210",
       "blood_type": "A",
       "issue_date": "2022-06-10",
       "expiry_date": "2027-06-10",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "003",
-      "name": "กิตติศักดิ์ มานะชัย",
-      "image": "",
-      "company": "บริษัท จี เอช ไอ จำกัด",
-      "license_number": "4561237890",
-      "blood_type": "B",
-      "issue_date": "2021-12-01",
-      "expiry_date": "2026-12-01",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
-      "position": "พนักงานรักษาความปลอดภัย"
-    },
-    {
-      "id": "004",
-      "name": "วราภรณ์ นาคทอง",
-      "image": "",
-      "company": "บริษัท เค แอล เอ็ม จำกัด",
-      "license_number": "7894561230",
-      "blood_type": "AB",
-      "issue_date": "2020-03-20",
-      "expiry_date": "2025-03-20",
       "position": "พนักงานรักษาความปลอดภัย"
     },
   ];
@@ -269,48 +148,6 @@ class _SecurityLicenseState extends State<SecurityLicense>
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    // Container(
-                    //   height: 45.0,
-                    //   width: MediaQuery.of(context).size.width - 10,
-                    //   child: TextField(
-                    //     autofocus: false,
-                    //     cursorColor: Color(0XFFB03432),
-                    //     controller: txtSearch,
-                    //     onChanged: searchData,
-                    //     keyboardType: TextInputType.multiline,
-                    //     maxLines: 1,
-                    //     style: TextStyle(
-                    //       fontSize: 13,
-                    //       fontFamily: 'Sarabun',
-                    //     ),
-                    //     textAlign: TextAlign.left,
-                    //     decoration: InputDecoration(
-                    //       filled: true,
-                    //       fillColor: Colors.transparent,
-                    //       hintText: 'ค้นหาจากชื่อ, บริษัท หรือเลขใบอนุญาต',
-                    //       contentPadding: const EdgeInsets.symmetric(
-                    //           vertical: 10.0, horizontal: 10.0),
-                    //       enabledBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //           color: Color(0XFFB03432),
-                    //         ),
-                    //       ),
-                    //       focusedBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //           color: Color(0XFFB03432),
-                    //         ),
-                    //       ),
-                    //       prefixIcon: Padding(
-                    //         padding: EdgeInsets.all(10),
-                    //         child: Image.asset(
-                    //           'assets/images/search.png',
-                    //           color: Color(0XFFB03432),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-
                     ListView.builder(
                       shrinkWrap: true,
                       physics: BouncingScrollPhysics(),
@@ -341,6 +178,26 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                 children: [
                                   Row(
                                     children: [
+                                      // Container(
+                                      //   height: 85,
+                                      //   width: 85,
+                                      //   padding: EdgeInsets.only(right: 10),
+                                      //   child: item["image"] != ''
+                                      //       ? CircleAvatar(
+                                      //           backgroundColor:
+                                      //               Colors.transparent,
+                                      //           backgroundImage: NetworkImage(
+                                      //               item["image"]!),
+                                      //         )
+                                      //       : Container(
+                                      //           padding: EdgeInsets.all(10.0),
+                                      //           child: Image.asset(
+                                      //             'assets/images/user_not_found.png',
+                                      //             color: Theme.of(context)
+                                      //                 .primaryColorLight,
+                                      //           ),
+                                      //         ),
+                                      // ),
                                       Container(
                                         height: 85,
                                         width: 85,
@@ -349,8 +206,8 @@ class _SecurityLicenseState extends State<SecurityLicense>
                                             ? CircleAvatar(
                                                 backgroundColor:
                                                     Colors.transparent,
-                                                backgroundImage: NetworkImage(
-                                                    item["image"]!),
+                                                backgroundImage: AssetImage(item[
+                                                    "image"]!), // Use AssetImage
                                               )
                                             : Container(
                                                 padding: EdgeInsets.all(10.0),
