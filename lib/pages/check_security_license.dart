@@ -78,6 +78,17 @@ class _SecurityLicenseState extends State<SecurityLicense>
       "expiry_date": "2027-06-10",
       "position": "พนักงานรักษาความปลอดภัย"
     },
+    {
+      "id": "003",
+      "name": "นายแดง เขียว ",
+      "image": "assets/รปภ3.jpg",
+      "company": "บริษัท ดี อี เอฟ จำกัด",
+      "license_number": "6543123",
+      "blood_type": "A",
+      "issue_date": "2022-06-10",
+      "expiry_date": "2027-06-10",
+      "position": "พนักงานรักษาความปลอดภัย"
+    },
   ];
 
   @override

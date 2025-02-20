@@ -123,7 +123,7 @@ class _QrScreen extends State<QrScreen> {
               ),
             ),
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.4,
+              top: MediaQuery.of(context).size.height * 0.35,
               child: Container(
                 alignment: Alignment.center,
                 height: MediaQuery.of(context).size.height,
@@ -142,8 +142,8 @@ class _QrScreen extends State<QrScreen> {
                       //   ),
                       // ),
                       Container(
-                        height: 85,
-                        width: 85,
+                        height: 185,
+                        width: 185,
                         padding: EdgeInsets.only(right: 10),
                         child: item["image"] != ''
                             ? CircleAvatar(
