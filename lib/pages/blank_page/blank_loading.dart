@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BlankLoading extends StatefulWidget {
-  BlankLoading({Key? key,required this.width,required this.height}) : super(key: key);
+  BlankLoading({Key? key, required this.width, required this.height})
+      : super(key: key);
 
   final double? width;
   final double? height;
@@ -29,21 +30,28 @@ class _BlankLoading extends State<BlankLoading>
     super.dispose();
   }
 
-  Animatable<Color> background = TweenSequence<Color>([
+  Animatable<Color?> background = TweenSequence<Color?>([
     TweenSequenceItem(
       weight: 1.0,
       tween: ColorTween(
         begin: Colors.black.withAlpha(20),
-        end: Colors.black.withAlpha(80),
-      ) as Animatable<Color> 
+        end: Colors.black.withAlpha(50),
+      ),
     ),
     TweenSequenceItem(
-      weight: 2.0,
+      weight: 1.0,
       tween: ColorTween(
-        begin: Colors.black.withAlpha(80),
+        begin: Colors.black.withAlpha(50),
         end: Colors.black.withAlpha(20),
-      )as Animatable<Color>
+      ),
     ),
+    // TweenSequenceItem(
+    //   weight: 1.0,
+    //   tween: ColorTween(
+    //     begin: Colors.blue,
+    //     end: Colors.pink,
+    //   ),
+    // ),
   ]);
 
   @override

@@ -122,13 +122,13 @@ class _ListContentHorizontalPrivilege
                     onTap: () {
                       widget.navigationList();
                     },
-                    child: Container(
-                        padding: EdgeInsets.only(right: 10.0),
-                        margin: EdgeInsets.only(bottom: 5.0),
-                        child: Image.asset(
-                          'assets/images/double_arrow_right.png',
-                          height: 15.0,
-                        )),
+                    //   child: Container(
+                    //       padding: EdgeInsets.only(right: 10.0),
+                    //       margin: EdgeInsets.only(bottom: 5.0),
+                    //       child: Image.asset(
+                    //         'assets/images/double_arrow_right.png',
+                    //         height: 15.0,
+                    //       )),
                   ),
                 ],
               ),

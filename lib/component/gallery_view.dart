@@ -37,9 +37,10 @@ class _GalleryViewState extends State<GalleryView> {
   }
 
   dataImage(index) {
+    print('---------${widget.imageProvider}');
     return ImageViewer(
-      initialIndex: index,
-      imageProviders: widget.imageProvider ?? [],
+      initialIndex: 0,
+      imageProviders: widget.imageProvider,
     );
   }
 
@@ -247,7 +248,9 @@ class _ImageViewerState extends State<ImageViewer>
 
     _offsetController =
         AnimationController(vsync: this, duration: Duration.zero);
-    _offsetTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+    _offsetTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero)
+      ..begin ??= Offset.zero
+      ..end ??= Offset.zero;
     _offsetAnimation = _offsetTween.animate(
       CurvedAnimation(
         parent: _offsetController,
@@ -299,7 +302,8 @@ class _ImageViewerState extends State<ImageViewer>
       _opacityController.reset();
       _opacityController.forward();
 
-      _offsetTween.begin = Offset(0, _offsetTween.end!.dy);
+      _offsetTween.begin = Offset(0, (_offsetTween.end ?? Offset.zero).dy);
+
       _offsetTween.end = Offset.zero;
       _offsetController.duration = Duration(milliseconds: 200);
       _offsetController.reset();

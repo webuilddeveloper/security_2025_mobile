@@ -28,20 +28,20 @@ class _CommentLoading extends State<CommentLoading>
     super.dispose();
   }
 
-  Animatable<Color> background = TweenSequence<Color>([
+  Animatable<Color?> background = TweenSequence<Color?>([
     TweenSequenceItem(
       weight: 1.0,
       tween: ColorTween(
         begin: Colors.black.withAlpha(20),
         end: Colors.black.withAlpha(50),
-      ) as Animatable<Color>,
+      ),
     ),
     TweenSequenceItem(
       weight: 1.0,
       tween: ColorTween(
         begin: Colors.black.withAlpha(50),
         end: Colors.black.withAlpha(20),
-      ) as Animatable<Color>,
+      ),
     ),
     // TweenSequenceItem(
     //   weight: 1.0,

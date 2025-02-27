@@ -1214,8 +1214,8 @@ class _HomePageState extends State<HomePage> {
                                     url: data['url'] ?? '',
                                     code: data['code'] ?? '',
                                     model: data ?? '',
-                                    urlComment: newsApi ?? '',
-                                    urlGallery: newsGalleryApi ?? '',
+                                    urlComment: newsApi,
+                                    urlGallery: newsGalleryApi,
                                   ),
                                 ),
                               );
@@ -1240,28 +1240,76 @@ class _HomePageState extends State<HomePage> {
                                       topLeft: Radius.circular(14),
                                       topRight: Radius.circular(14),
                                     ),
+                                    // child: Container(
+                                    //   decoration: BoxDecoration(
+                                    //     borderRadius: BorderRadius.only(
+                                    //       topLeft: Radius.circular(14),
+                                    //       topRight: Radius.circular(14),
+                                    //     ),
+                                    //     color: Color(0xFFFFFFFF),
+                                    //   ),
+                                    //   constraints: BoxConstraints(
+                                    //     minHeight: 200,
+                                    //     maxHeight: 200,
+                                    //     minWidth: double.infinity,
+                                    //   ),
+                                    //   child: data['imageUrl'] != null
+                                    //       ? Image.network(
+                                    //           '${data['imageUrl']}',
+                                    //           fit: BoxFit.contain,
+                                    //         )
+                                    //       : BlankLoading(
+                                    //           height: 200,
+                                    //           width: null,
+                                    //         ),
+                                    // ),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(14),
-                                          topRight: Radius.circular(14),
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(14),
                                         ),
-                                        color: Color(0xFFFFFFFF),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            blurRadius: 5,
+                                            spreadRadius: 2,
+                                            offset: Offset(0, 2),
+                                          ),
+                                        ],
                                       ),
                                       constraints: BoxConstraints(
                                         minHeight: 200,
                                         maxHeight: 200,
                                         minWidth: double.infinity,
                                       ),
-                                      child: data['imageUrl'] != null
-                                          ? Image.network(
-                                              '${data['imageUrl']}',
-                                              fit: BoxFit.cover,
-                                            )
-                                          : BlankLoading(
-                                              height: 200,
-                                              width: null,
-                                            ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(14),
+                                        ),
+                                        child: data['imageUrl'] != null &&
+                                                data['imageUrl']
+                                                    .toString()
+                                                    .isNotEmpty
+                                            ? Image.network(
+                                                data['imageUrl'],
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: 200,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    Icon(
+                                                  Icons.broken_image,
+                                                  size: 50,
+                                                  color: Colors.grey,
+                                                ),
+                                              )
+                                            : BlankLoading(
+                                                height: 200,
+                                                width: null,
+                                              ),
+                                      ),
                                     ),
                                   ),
                                   Container(

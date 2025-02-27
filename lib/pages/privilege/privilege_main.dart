@@ -63,7 +63,31 @@ class _PrivilegeMain extends State<PrivilegeMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: header(context, goBack, title: widget.title, rightButton: null),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Center(
+          child: Text(
+            widget.title,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        backgroundColor: const Color(0XFFB03432),
+      ),
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (OverscrollIndicatorNotification overScroll) {
           overScroll.disallowIndicator();
