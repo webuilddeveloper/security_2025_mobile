@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:security_2025_mobile_v3/pages/Complaint.dart';
 import 'package:security_2025_mobile_v3/pages/check%20_information.dart';
-import 'package:security_2025_mobile_v3/pages/check_security_license.dart';
-import 'package:security_2025_mobile_v3/component/carousel_rotation.dart';
 import 'package:security_2025_mobile_v3/component/material/check_avatar.dart';
 import 'package:security_2025_mobile_v3/component/menu/build_verify_ticket.dart';
 import 'package:security_2025_mobile_v3/component/menu/color_item.dart';
@@ -12,7 +10,6 @@ import 'package:security_2025_mobile_v3/component/v2/button_menu_full.dart';
 import 'package:security_2025_mobile_v3/login.dart';
 import 'package:security_2025_mobile_v3/pages/blank_page/blank_loading.dart';
 import 'package:security_2025_mobile_v3/pages/blank_page/toast_fail.dart';
-import 'package:security_2025_mobile_v3/pages/coming_soon.dart';
 import 'package:security_2025_mobile_v3/pages/dispute_an_allegation.dart';
 import 'package:security_2025_mobile_v3/pages/matching_job.dart';
 import 'package:security_2025_mobile_v3/pages/news/news_form.dart';
@@ -42,6 +39,7 @@ import 'package:security_2025_mobile_v3/pages/profile/user_information.dart';
 import 'package:security_2025_mobile_v3/pages/register_permission_mian.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart';
 import 'package:security_2025_mobile_v3/component/carousel_form.dart';
+import 'component/carousel_rotation.dart';
 import 'pages/event_calendar/event_calendar_main.dart';
 import 'pages/knowledge/knowledge_list.dart';
 import 'pages/main_popup/dialog_main_popup.dart';
@@ -77,26 +75,35 @@ class _HomePageState extends State<HomePage> {
 
   bool notShowOnDay = false;
   bool hiddenMainPopUp = false;
-  List<dynamic> _dataPolicy = [];
   bool checkDirection = false;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(
+      initialRefresh: false,
+      initialRefreshStatus: RefreshStatus.idle,
+      initialLoadStatus: LoadStatus.idle);
 
   LatLng latLng = LatLng(13.743989326935178, 100.53754006134743);
+
+  int _currentNewsPage = 0;
+  int _newsLimit = 4;
+  List<dynamic> _newsList = [];
+  bool _hasMoreNews = true;
 
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    _newsList = [];
     _read();
+    currentBackPressTime = DateTime.now();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Color(0XFFF3F5F5),
+      // backgroundColor: Colors.transparent,
       // appBar: _buildHeader(),
       body: WillPopScope(
         child: _buildBackground(),
@@ -151,92 +158,35 @@ class _HomePageState extends State<HomePage> {
   _buildSmartRefresher() {
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: false,
-      header: WaterDropHeader(
-        complete: Container(
-          child: Text(''),
-        ),
-        completeDuration: Duration(milliseconds: 0),
-      ),
-      footer: CustomFooter(
-        builder: (BuildContext context, LoadStatus? mode) {
-          Widget body;
-          if (mode == LoadStatus.idle) {
-            body = Text("pull up load");
-          } else if (mode == LoadStatus.loading) {
-            body = Text("loading");
-          } else if (mode == LoadStatus.failed) {
-            body = Text("Load Failed!Click retry!");
-          } else if (mode == LoadStatus.canLoading) {
-            body = Text("release to load more");
-          } else {
-            body = Text("No more Data");
-          }
-          return Container(
-            height: 55.0,
-            child: Center(child: body),
-          );
-        },
-      ),
+      enablePullUp: true,
+      header: ClassicHeader(/* เหมือนเดิม */),
+      footer: ClassicFooter(/* เหมือนเดิม */),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
+      physics: BouncingScrollPhysics(),
       child: _buildMenu(context),
-
-      // Column(
-      //   children: [
-      //     // Container(
-      //     //   height: (height * 25) / 100,
-      //     //   child:
-
-      //     SizedBox(
-      //       height: 1.0,
-      //     ),
-
-      //     SizedBox(
-      //       height: 1.0,
-      //     ),
-
-      // Container(
-      //   height: 70.0,
-      //   child: CardHorizontal(
-      //     title: model[11]['title'] != '' ? model[11]['title'] : '',
-      //     imageUrl: model[11]['imageUrl'],
-      //     model: _futureMenu,
-      //     userData: userData,
-      //     subTitle: 'สำหรับสมาชิก',
-      //     nav: () {
-      //       // Navigator.push(
-      //       //   context,
-      //       //   MaterialPageRoute(
-      //       //     builder: (context) => PrivilegeMain(
-      //       //       title: model[11]['title'],
-      //       //     ),
-      //       //   ),
-      //       // );
-      //     },
-      //   ),
-      // ),
-      //   ],
-      // ),
-      // ),
     );
   }
 
   _buildMenu(context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      color: Color(0XFFF3F5F5),
-      padding: EdgeInsets.all(15),
-      child: ListView(
-        children: [
-          _buildProfile(),
-          SizedBox(height: 20),
-          _buildBanner(),
-          _buildService(),
-          _buildNews(),
-        ],
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Container(
+          color: Color(0XFFF3F5F5),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                _buildProfile(),
+                SizedBox(height: 20),
+                _buildBanner(),
+                _buildService(),
+                _buildNews(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -1242,194 +1192,109 @@ class _HomePageState extends State<HomePage> {
             future: _futureNews,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
-                return Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: snapshot.data.take(2).map<Widget>(
-                      (data) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NewsForm(
-                                  url: data['url'],
-                                  code: data['code'],
-                                  model: data,
-                                  urlComment: newsApi,
-                                  urlGallery: newsGalleryApi,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.43,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.transparent,
-                                  spreadRadius: 0,
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(14),
-                                    topRight: Radius.circular(14),
+                print("กำลังรับข้อมูลจาก FutureBuilder");
+                if (_newsList.isEmpty) {
+                  _newsList = snapshot.data;
+                  print("รับข้อมูล ${_newsList.length} รายการ");
+                }
+
+                return Center(
+                  child: Container(
+                    child: Wrap(
+                      spacing: 15.0,
+                      runSpacing: 15.0,
+                      children: _newsList.map<Widget>(
+                        (data) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewsForm(
+                                    url: data['url'] ?? '',
+                                    code: data['code'] ?? '',
+                                    model: data ?? '',
+                                    urlComment: newsApi ?? '',
+                                    urlGallery: newsGalleryApi ?? '',
                                   ),
-                                  child: Container(
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.43,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.transparent,
+                                    spreadRadius: 0,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(14),
+                                      topRight: Radius.circular(14),
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(14),
+                                          topRight: Radius.circular(14),
+                                        ),
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                      constraints: BoxConstraints(
+                                        minHeight: 200,
+                                        maxHeight: 200,
+                                        minWidth: double.infinity,
+                                      ),
+                                      child: data['imageUrl'] != null
+                                          ? Image.network(
+                                              '${data['imageUrl']}',
+                                              fit: BoxFit.cover,
+                                            )
+                                          : BlankLoading(
+                                              height: 200,
+                                              width: null,
+                                            ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 60,
                                     decoration: BoxDecoration(
-                                      borderRadius: new BorderRadius.only(
-                                        topLeft: const Radius.circular(14),
-                                        topRight: const Radius.circular(14),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(14),
+                                        bottomRight: Radius.circular(14),
                                       ),
                                       color: Color(0xFFFFFFFF),
                                     ),
-                                    constraints: BoxConstraints(
-                                      minHeight: 200,
-                                      maxHeight: 200,
-                                      minWidth: double.infinity,
-                                    ),
-                                    child: data['imageUrl'] != null
-                                        ? Image.network(
-                                            '${data['imageUrl']}',
-                                            fit: BoxFit.cover,
-                                          )
-                                        : BlankLoading(
-                                            height: 200,
-                                            width: null,
-                                          ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: new BorderRadius.only(
-                                      bottomLeft: const Radius.circular(14),
-                                      bottomRight: const Radius.circular(14),
-                                    ),
-                                    color: Color(0xFFFFFFFF),
-                                  ),
-                                  padding: EdgeInsets.all(5.0),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    '${data['title']}',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: 'Sarabun',
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.normal,
+                                    padding: EdgeInsets.all(5.0),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      '${data['title']}',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'Sarabun',
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ).toList(),
+                          );
+                        },
+                      ).toList(),
+                    ),
                   ),
                 );
-                // return Container(
-                //   height: 280,
-                //   color: Colors.transparent,
-                //   // alignment: Alignment.center,
-                //   child: ListView.builder(
-                //     physics: ScrollPhysics(),
-                //     shrinkWrap: true,
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: snapshot.data.take(2).length,
-                //     itemBuilder: (context, index) {
-                //       return GestureDetector(
-                //         onTap: () {
-                //           Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) => NewsForm(
-                //                 url: snapshot.data['url'],
-                //                 code: snapshot.data[index]['code'],
-                //                 model: snapshot.data[index],
-                //                 urlComment: newsApi,
-                //                 urlGallery: newsGalleryApi,
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //         child: Container(
-                //           width: MediaQuery.of(context).size.width * 0.45,
-                //           padding: EdgeInsets.(10),
-                //           decoration: BoxDecoration(
-                //             borderRadius: BorderRadius.circular(15),
-                //             boxShadow: [
-                //               BoxShadow(
-                //                 color: Colors.transparent,
-                //                 spreadRadius: 0,
-                //                 blurRadius: 7,
-                //                 offset:
-                //                     Offset(0, 3), // changes position of shadow
-                //               ),
-                //             ],
-                //           ),
-                //           child: Column(
-                //             children: [
-                //               Container(
-                //                 decoration: BoxDecoration(
-                //                   borderRadius: new BorderRadius.only(
-                //                     topLeft: const Radius.circular(14),
-                //                     topRight: const Radius.circular(14),
-                //                   ),
-                //                   color: Color(0xFFFFFFFF),
-                //                 ),
-                //                 constraints: BoxConstraints(
-                //                   minHeight: 200,
-                //                   maxHeight: 200,
-                //                   minWidth: double.infinity,
-                //                 ),
-                //                 child: snapshot.data[index]['imageUrl'] != null
-                //                     ? Image.network(
-                //                         '${snapshot.data[index]['imageUrl']}',
-                //                         fit: BoxFit.cover,
-                //                       )
-                //                     : BlankLoading(
-                //                         height: 200,
-                //                       ),
-                //               ),
-                //               Container(
-                //                 height: 60,
-                //                 decoration: BoxDecoration(
-                //                   borderRadius: new BorderRadius.only(
-                //                     bottomLeft: const Radius.circular(14),
-                //                     bottomRight: const Radius.circular(14),
-                //                   ),
-                //                   color: Color(0xFFFFFFFF),
-                //                 ),
-                //                 padding: EdgeInsets.all(5.0),
-                //                 alignment: Alignment.centerLeft,
-                //                 child: Text(
-                //                   '${snapshot.data[index]['title']}',
-                //                   maxLines: 2,
-                //                   overflow: TextOverflow.ellipsis,
-                //                   style: TextStyle(
-                //                     fontFamily: 'Sarabun',
-                //                     fontSize: 15.0,
-                //                     fontWeight: FontWeight.normal,
-                //                   ),
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // );
               } else if (snapshot.hasError) {
                 return BlankLoading(
                   width: null,
@@ -1805,8 +1670,6 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
-
-    ;
   }
 
   _buildPoiMenu() {
@@ -1919,9 +1782,7 @@ class _HomePageState extends State<HomePage> {
 
   _read() async {
     // print('-------------start response------------');
-
     _getLocation();
-
     //read profile
     profileCode = (await storage.read(key: 'profileCode3'))!;
     if (profileCode != '') {
@@ -1936,11 +1797,12 @@ class _HomePageState extends State<HomePage> {
       _futureRotation = postDio('${mainRotationApi}read', {'limit': 10});
       _futureMainPopUp = postDio('${mainPopupHomeApi}read', {'limit': 10});
       _futureAboutUs = postDio('${aboutUsApi}read', {});
+
+      _currentNewsPage = 0;
       _futureNews = postDio('${newsApi}read', {
-        'skip': 0,
-        'limit': 2,
+        'skip': _currentNewsPage * _newsLimit,
+        'limit': _newsLimit,
         'app': 'security',
-        // 'category': '20241028102544-336-593',
       });
 
       _futureVerifyTicket = postDio(getNotpaidTicketListApi,
@@ -2038,36 +1900,58 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _onRefresh() async {
-    // getCurrentUserData();
-    _read();
-
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
-    // _refreshController.loadComplete();
-  }
-
   void _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    if (!_hasMoreNews) {
+      _refreshController.loadComplete();
+      return;
+    }
+    _currentNewsPage++;
+    final moreNews = await postDio('${newsApi}read', {
+      'skip': _currentNewsPage * _newsLimit,
+      'limit': _newsLimit,
+      'app': 'security',
+    });
+    if (moreNews != null && moreNews.length < _newsLimit) {
+      _hasMoreNews = false;
+    }
+    if (moreNews == null || moreNews.isEmpty) {
+      _hasMoreNews = false;
+      _refreshController.loadNoData();
+      return;
+    }
+    setState(() {
+      if (_newsList.isEmpty) {
+        _newsList = moreNews;
+      } else {
+        _newsList.addAll(moreNews);
+      }
+    });
     _refreshController.loadComplete();
   }
 
-  // _getLocation() async {
-  //   print('currentLocation');
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.best);
+  void _onRefresh() async {
+    print("เริ่มรีเฟรช");
+    _currentNewsPage = 0;
+    _newsList = [];
 
-  //   // print('------ Position -----' + position.toString());
+    try {
+      var newsData = await postDio('${newsApi}read', {
+        'skip': 0,
+        'limit': _newsLimit,
+        'app': 'security',
+      });
 
-  //   List<Placemark> placemarks =
-  //       await placemarkFromCoordinates(position.latitude, position.longitude);
-  //   // print('----------' + placemarks.toString());
+      setState(() {
+        _newsList = newsData;
+        print("รีเฟรชข้อมูลเสร็จสิ้น: ${_newsList.length} รายการ");
+      });
+    } catch (e) {
+      print("เกิดข้อผิดพลาดในการรีเฟรช: $e");
+    }
 
-  //   setState(() {
-  //     latLng = LatLng(position.latitude, position.longitude);
-  //     currentLocation = placemarks.first.administrativeArea!;
-  //   });
-  // }
+    _refreshController.refreshCompleted();
+    _hasMoreNews = true;
+  }
 
   Future<void> _getLocation() async {
     bool serviceEnabled;
@@ -2101,6 +1985,7 @@ class _HomePageState extends State<HomePage> {
     try {
       // ✅ 3. ดึงพิกัดปัจจุบัน
       Position position = await Geolocator.getCurrentPosition(
+        // ignore: deprecated_member_use
         desiredAccuracy: LocationAccuracy.best,
       );
 

@@ -5,7 +5,6 @@ import 'package:security_2025_mobile_v3/component/content.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-// ignore: must_be_immutable
 class NewsForm extends StatefulWidget {
   NewsForm({
     Key? key,
@@ -72,6 +71,7 @@ class _NewsForm extends State<NewsForm> {
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
+    // return Container();
     return Scaffold(
       backgroundColor: Colors.white,
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -80,8 +80,8 @@ class _NewsForm extends State<NewsForm> {
           return false;
         },
         child: SmartRefresher(
-          enablePullDown: false,
-          enablePullUp: true,
+          enablePullDown: true,
+          enablePullUp: false,
           footer: ClassicFooter(
             loadingText: ' ',
             canLoadingText: ' ',
