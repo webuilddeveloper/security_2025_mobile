@@ -248,9 +248,7 @@ class _ImageViewerState extends State<ImageViewer>
 
     _offsetController =
         AnimationController(vsync: this, duration: Duration.zero);
-    _offsetTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero)
-      ..begin ??= Offset.zero
-      ..end ??= Offset.zero;
+    _offsetTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
     _offsetAnimation = _offsetTween.animate(
       CurvedAnimation(
         parent: _offsetController,
@@ -290,7 +288,8 @@ class _ImageViewerState extends State<ImageViewer>
   }
 
   void _onDragEnd(double velocity) {
-    double? _start = null;
+    // ลบตัวแปรที่ไม่ได้ใช้ออก
+    // double? _start = null;
 
     if (velocity > _kMaxDragSpeed ||
         _offsetTween.end!.dy >= MediaQuery.of(context).size.height / 2) {
@@ -302,8 +301,7 @@ class _ImageViewerState extends State<ImageViewer>
       _opacityController.reset();
       _opacityController.forward();
 
-      _offsetTween.begin = Offset(0, (_offsetTween.end ?? Offset.zero).dy);
-
+      _offsetTween.begin = Offset(0, _offsetTween.end!.dy);
       _offsetTween.end = Offset.zero;
       _offsetController.duration = Duration(milliseconds: 200);
       _offsetController.reset();
@@ -488,7 +486,7 @@ class OffsetTransition extends AnimatedWidget {
 
   final Widget child;
 
-  Listenable get offset => listenable;
+  Animation<Offset> get offset => listenable as Animation<Offset>;
 
   @override
   Widget build(BuildContext context) {
@@ -499,8 +497,5 @@ class OffsetTransition extends AnimatedWidget {
   }
 }
 
-extension on Listenable {
-  get value => null;
-}
 
 // main() => runApp(GalleryView());

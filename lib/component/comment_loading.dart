@@ -43,13 +43,6 @@ class _CommentLoading extends State<CommentLoading>
         end: Colors.black.withAlpha(20),
       ),
     ),
-    // TweenSequenceItem(
-    //   weight: 1.0,
-    //   tween: ColorTween(
-    //     begin: Colors.blue,
-    //     end: Colors.pink,
-    //   ),
-    // ),
   ]);
 
 // @override
