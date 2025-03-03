@@ -1,16 +1,16 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:security_2025_mobile_v3/component/key_search.dart';
 import 'package:security_2025_mobile_v3/component/tab_category.dart';
 import 'package:security_2025_mobile_v3/pages/news/news_list_vertical.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart' as service;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:security_2025_mobile_v3/shared/api_provider.dart';
 
 class NewsList extends StatefulWidget {
   NewsList({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String title;
 
@@ -19,94 +19,28 @@ class NewsList extends StatefulWidget {
 }
 
 class _NewsList extends State<NewsList> {
-  late NewsListVertical news;
+  NewsListVertical? news;
   bool hideSearch = true;
   final txtDescription = TextEditingController();
-  String keySearch = "";
-  String category = "";
-
-  List<dynamic> allNewsData = []; // เก็บข้อมูลข่าวทั้งหมด
-  bool isLoading = false;
-  bool hasMoreData = true;        // ตัวแปรเก็บสถานะว่ามีข้อมูลให้โหลดเพิ่มหรือไม่
-
-  int _currentPage = 0;
-  int _newsLimit = 10;
+  String? keySearch;
+  String? category;
+  int _limit = 10;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  // Helper method ที่ใช้รูปแบบเดียวกับหน้าแรก
-  
-  Future<dynamic> fetchNews({
-    required int page,
-    required int limit,
-    String search = "",
-    String cat = "",
-  }) {
-    final requestData = {
-      'skip': page * limit,
-      'limit': limit,
-      'app': 'security',
-      'keySearch': search,
-      'category': cat,
-    };
-
-    // print("📌 Data ที่ส่งไป API: ${jsonEncode(requestData)}");
-
-    return service.postDio('${service.newsApi}read', requestData);
-  }
-
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
-  }
 
-  Future<void> _loadInitialData() async {
-    setState(() {
-      isLoading = true;
-      _currentPage = 0;
-      allNewsData = [];
-    });
-
-    try {
-      final response = await fetchNews(
-        page: _currentPage,
-        limit: _newsLimit,
-        search: keySearch,
-        cat: category,
-      );
-
-      setState(() {
-        if (response is List) {
-          allNewsData = response;
-          hasMoreData = response.length >= _newsLimit;
-        } else {
-          allNewsData = [];
-          hasMoreData = false;
-        }
-        isLoading = false;
-      });
-
-      _initNewsComponent();
-    } catch (error) {
-      setState(() {
-        allNewsData = [];
-        isLoading = false;
-        hasMoreData = false;
-      });
-      print("❌ เกิดข้อผิดพลาด: $error");
-    }
-  }
-
-  void _initNewsComponent() {
-    news = NewsListVertical(
+    news = new NewsListVertical(
       site: "DDPM",
-      model: Future.value(allNewsData), // ส่งข้อมูลที่มีอยู่แล้ว
+      model: postDio(
+          '${newsApi}read', {'skip': 0, 'limit': _limit, 'app': 'security'}),
       url: '${service.newsApi}read',
+      urlComment: '${service.newsCommentApi}read',
       urlGallery: '${service.newsGalleryApi}',
       title: '',
-      urlComment: '',
     );
   }
 
@@ -116,59 +50,32 @@ class _NewsList extends State<NewsList> {
   }
 
   void _onLoading() async {
-    if (!hasMoreData || isLoading) {
-      _refreshController.loadComplete();
-      return;
-    }
-
     setState(() {
-      isLoading = true;
+      _limit = _limit + 10;
+
+      news = new NewsListVertical(
+        site: 'DDPM',
+        model: postDio('${newsApi}read', {
+          'skip': 0,
+          'limit': _limit,
+          "keySearch": keySearch,
+          // 'category': category,
+          'app': 'security',
+        }),
+        url: '${service.newsApi}read',
+        urlGallery: '${service.newsGalleryApi}',
+        title: '',
+        urlComment: '',
+      );
     });
 
-    try {
-      final nextPage = _currentPage + 1;
-      final response = await fetchNews(
-        page: nextPage,
-        limit: _newsLimit,
-        search: keySearch,
-        cat: category,
-      );
-
-      if (response is List && response.isNotEmpty) {
-        setState(() {
-          allNewsData.addAll(response);
-          _currentPage = nextPage;
-          hasMoreData = response.length >= _newsLimit;
-          isLoading = false;
-        });
-
-        // อัปเดต NewsListVertical ด้วยข้อมูลทั้งหมดที่มี
-        _initNewsComponent();
-      } else {
-        setState(() {
-          hasMoreData = false;
-          isLoading = false;
-        });
-      }
-    } catch (error) {
-      setState(() {
-        isLoading = false;
-        hasMoreData = false;
-      });
-      print("❌ เกิดข้อผิดพลาดในการโหลดข้อมูลเพิ่มเติม: $error");
-    }
+    await Future.delayed(Duration(milliseconds: 1000));
 
     _refreshController.loadComplete();
   }
 
   void goBack() async {
     Navigator.pop(context, false);
-  }
-
-  void _resetSearch() {
-    keySearch = "";
-    category = "";
-    _loadInitialData();
   }
 
   @override
@@ -186,20 +93,14 @@ class _NewsList extends State<NewsList> {
         title: Center(
           child: Text(
             widget.title,
+            // 'ข่าวประชาสัมพันธ์',
             style: TextStyle(color: Colors.white),
           ),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              setState(() {
-                hideSearch = !hideSearch;
-                if (hideSearch) {
-                  _resetSearch();
-                }
-              });
-            },
+            onPressed: () {},
           ),
         ],
         backgroundColor: Color(0XFFB03432),
@@ -213,56 +114,80 @@ class _NewsList extends State<NewsList> {
           enablePullDown: false,
           enablePullUp: true,
           footer: ClassicFooter(
-            loadingText: 'กำลังโหลด...',
-            canLoadingText: 'โหลดเพิ่มเติม',
-            idleText: hasMoreData
-                ? 'เลื่อนขึ้นเพื่อโหลดเพิ่มเติม'
-                : 'ไม่มีข้อมูลเพิ่มเติม',
-            noDataText: 'ไม่มีข้อมูลเพิ่มเติม',
-            idleIcon: Icon(Icons.arrow_upward,
-                color: hasMoreData ? Colors.grey : Colors.transparent),
+            loadingText: ' ',
+            canLoadingText: ' ',
+            idleText: ' ',
+            idleIcon: Icon(Icons.arrow_upward, color: Colors.transparent),
           ),
           controller: _refreshController,
           onLoading: _onLoading,
           child: ListView(
             physics: ScrollPhysics(),
             shrinkWrap: true,
+            // controller: _controller,
             children: [
-              SizedBox(height: 5),
-              KeySearch(
-                show: hideSearch,
-                onKeySearchChange: (String val) {
-                  keySearch = val;
-                  _loadInitialData();
-                },
-              ),
-              SizedBox(height: 5),
+              // SubHeader(th: "ข่าวสารประชาสัมพันธ์", en: "News"),
+              SizedBox(height: 30),
               CategorySelector(
                 model: service.postCategory(
                   '${service.newsCategoryApi}read',
-                  {
-                    'skip': 0,
-                    'limit': 10,
-                    'app': 'security',
-                  },
+                  {'skip': 0, 'limit': 100, 'code': '20241028102515-482-400'},
                 ),
                 onChange: (String val) {
-                  category = val;
-                  _loadInitialData();
+                  setState(
+                    () {
+                      // category = val;
+                      news = new NewsListVertical(
+                        site: 'DDPM',
+                        model: postDio('${newsApi}read', {
+                          'skip': 0,
+                          'limit': _limit,
+                          // "category": category,
+                          'app': 'security',
+                          "keySearch": keySearch
+                        }),
+                        url: '${service.newsApi}read',
+                        urlGallery: '${service.newsGalleryApi}',
+                        title: '',
+                        urlComment: '',
+                      );
+                    },
+                  );
                 },
                 site: '',
               ),
+              const SizedBox(height: 5),
+              KeySearch(
+                show: hideSearch,
+                onKeySearchChange: (String val) {
+                  // newsList(context, service.post('${service.newsApi}read', {'skip': 0, 'limit': 100,"keySearch": val}),'');
+                  setState(
+                    () {
+                      keySearch = val;
+                      news = new NewsListVertical(
+                        site: 'DDPM',
+                        model: postDio('${newsApi}read', {
+                          'skip': 0,
+                          'limit': _limit,
+                          "keySearch": keySearch,
+                          'app': 'security'
+                          // 'category': category
+                        }),
+                        url: '${service.newsApi}read',
+                        urlGallery: '${service.newsGalleryApi}',
+                        title: '',
+                        urlComment: '',
+                      );
+                    },
+                  );
+                },
+              ),
               SizedBox(height: 10),
-              isLoading && allNewsData.isEmpty
-                  ? Center(child: CircularProgressIndicator())
-                  : allNewsData.isEmpty
-                      ? Center(child: Text('ไม่พบข้อมูล'))
-                      : news,
-              if (isLoading && allNewsData.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
-                ),
+              news!,
+              // newsList(context, service.post('${service.newsApi}read', {'skip': 0, 'limit': 100}),''),
+              // Expanded(
+              //   child: news,
+              // ),
             ],
           ),
         ),
