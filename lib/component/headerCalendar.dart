@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-headerCalendar(
-  BuildContext context,
-  Function functionGoBack,
-  bool showCalendar, {
-  String title = '',
-  required Function rightButton,
-  bool showLeading = true
-}) {
+headerCalendar(BuildContext context, Function functionGoBack, bool showCalendar,
+    {String title = '',
+    required Function rightButton,
+    bool showLeading = true}) {
   return AppBar(
     centerTitle: true,
     flexibleSpace: Container(
@@ -34,19 +30,22 @@ headerCalendar(
         fontSize: 15,
         fontWeight: FontWeight.normal,
         fontFamily: 'Sarabun',
+        color: Colors.white,
       ),
     ),
-    leading: showLeading ? InkWell(
-      onTap: () => functionGoBack(),
-      child: Container(
-        child: Image.asset(
-          "assets/images/arrow_left.png",
-          color: Colors.white,
-          width: 40,
-          height: 40,
-        ),
-      ),
-    ) : null,
+    leading: showLeading
+        ? InkWell(
+            onTap: () => functionGoBack(),
+            child: Container(
+              child: Image.asset(
+                "assets/images/arrow_left.png",
+                color: Colors.white,
+                width: 40,
+                height: 40,
+              ),
+            ),
+          )
+        : null,
     actions: <Widget>[
       Container(
         child: Container(

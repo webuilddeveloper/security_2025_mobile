@@ -6,7 +6,6 @@ class EventCalendarListVertical extends StatefulWidget {
   EventCalendarListVertical({
     Key? key,
     required this.site,
-    required this.model,
     required this.title,
     required this.url,
     required this.urlComment,
@@ -14,7 +13,6 @@ class EventCalendarListVertical extends StatefulWidget {
   }) : super(key: key);
 
   final String site;
-  final Future<dynamic> model;
   final String title;
   final String url;
   final String urlComment;
@@ -25,20 +23,72 @@ class EventCalendarListVertical extends StatefulWidget {
 }
 
 class _EventCalendarListVertical extends State<EventCalendarListVertical> {
+  late Future<List<Map<String, dynamic>>> model;
+
   @override
   void initState() {
     super.initState();
+    model = Future.value(_getMockData());
+  }
+
+  List<Map<String, dynamic>> _getMockData() {
+    return [
+      {
+        'code': 'E001',
+        'title':
+            'สตง. เตรียมจัดกิจกรรมยิ่งใหญ่ ครบรอบ 150 ปีการตรวจเงินแผ่นดินไทย',
+        'description':
+            '''นายสุทธิพงษ์บุญนิธิรองผู้ว่าการตรวจเงินแผ่นดิน ในฐานะโฆษกสํานักงานการตรวจเงินแผ่นดิน เปิดเผยว่า สืบเนื่องจากในปี 2568 นี้ถือเป็นวาระสําคัญยิ่งที่การตรวจเงินแผ่นดินได้ถือกําเนิดขึ้นใน
+ประเทศไทยครบ 150 ปี ดังนั้น เพื่อเป็นการย้อนรําลึกถึงเหตุการณ์สําคัญทางประวัติศาสตร์เมื่อครั้งที่พระบาทสมเด็จพระจุลจอมเกล้าเจ้าอยู่หัวได้ทรงวางรากฐานการตรวจเงินแผ่นดินไทยขึ้นเป็นครั้งแรก โดย
+ทรงพระกรุณาโปรดเกล้าฯ ให้ตรา "พระราชบัญญัติสําหรับกรมพระคลังมหาสมบัติแลว่าด้วยกรมต่าง ๆซึ่งจะเบิกเงินส่งเงิน จุลศักราช 1237" ขึ้นเมื่อวันที่ 14 เมษายน พ.ศ. 2418และทรงพระกรุณาโปรดเกล้าฯ ให้ตั้ง
+“ออฟฟิศหลวง” หรือ “ออดิตออฟฟิศ” ขึ้นเพื่อเป็นที่ประชุมตรวจบัญชีคลัง ให้มีฐานะเป็นอิสระ ไม่ขึ้นกับกรมพระคลังมหาสมบัติ จวบจนถึงปัจจุบันการตรวจเงินแผ่นดินไทยได้มีการเปลี่ยนแปลงและพัฒนามาเป็นลําดับ
+และเพื่อเป็นการฉายภาพทิศทางการตรวจเงินแผ่นดินในการเสริมสร้างความโปร่งใสและความยั่งยืนให้กับสังคมไทย รวมถึงการเตรียมความพร้อมรับความท้าทายใหม่ ๆ ในอนาคต สํานักงานการตรวจเงินแผ่นดิน (สตง.)
+จึงได้เตรียมจัดกิจกรรมยิ่งใหญ่อย่างต่อเนื่องตลอดทั้งปี 2568 ภายใต้กรอบแนวคิด “ 150 ปี การตรวจเงินแผ่นดินไทย ก้าวไปในยุคดิจิทัล” โดยจะประกอบด้วย 3 กิจกรรมหลัก ดังนี้
+1. กิจกรรมด้านการรวบรวมข้อมูลทางประวัติศาสตร์ โดยลําดับเหตุการณ์สําคัญการตรวจเงินแผ่นดินไทยในแต่ละยุคสมัย การนําเสนอผลการตรวจสอบที่โดดเด่นจากอดีตถึงปัจจุบัน การนําเสนอเรื่องราวที่แสดงให้เห็นถึง
+ความวิริยะอุตสาหะ และความสามารถของบรรพชนคนตรวจเงินแผ่นดินในการปกป้องรักษาเงินแผ่นดิน ฯลฯ
+2. กิจกรรมจัดประชุมวิชาการทั้งในประเทศและระดับนานาชาติในหัวข้อที่เกี่ยวข้องกับการตรวจเงินแผ่นดินในมิติการพัฒนาที่ยั่งยืน (Sustainability) และการนําเทคโนโลยีดิจิทัลมาประยุกต์ใช้ในงานตรวจสอบ
+(Digitalization)
+3. กิจกรรมเพื่อสังคมและสาธารณประโยชน์ต่าง ๆ ซึ่งเป็นกิจกรรมที่ สตง. ได้ให้ความสําคัญและสนับสนุนส่งเสริมให้คณะผู้บริหารและเจ้าหน้าที่ทุกคนมีจิตสาธารณะในการบําเพ็ญประโยชน์เพื่อสังคมและ
+ประเทศชาติอย่างต่อเนื่อง
+ทั้งนี้ สําหรับรายละเอียดและช่วงเวลาของการจัดกิจกรรมจะได้แถลงต่อสื่อมวลชนอย่างเป็นทางการในช่วงเดือนธันวาคม 2567 ต่อไป''',
+        'imageUrl':
+            'https://gateway.we-builds.com/wb-py-media/uploads/smart-security\\20250228-110640-event 1.jpeg',
+        'createBy': 'admin',
+        'createDate': '20250228',
+        'updateBy': 'admin',
+        'updateDate': '20250228',
+        'view': 9436
+      },
+      {
+        'code': 'E002',
+        'title':
+            'การจ้างเจ้าหน้าที่รักษาความปลอดภัยขององค์กรปกครองส่วนท้องถิ่น',
+        'description':
+            'องค์กรปกครองส่วนท้องถิ่นสามารถพิจารณาจ้างเอกชนและเบิกจ่ายเงินค่าจ้างเหมาบริการในการปฏิบัติงานรักษาความปลอดภัย โดยต้องถือปฏิบัติตามหนังสือกระทรวงมหาดไทย ที่ มท 0808.2/ ว 4044 ลงวันที่ 10 กรกฎาคม 2563 เรื่อง หลักเกณฑ์การดำเนินการจ้างเอกชนและการเบิกจ่ายเงินค่าจ้างเหมาบริการขององค์กรปกครองส่วนท้องถิ่น และพระราชบัญญัติธุรกิจรักษาความปลอดภัย พ.ศ. 2558 สำหรับวิธีการในการจ้างเอกชนให้ถือปฏิบัติตามพระราชบัญญัติการจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ. 2560 ส่วนการจ้างบุคคลธรรมดาให้ทำหน้าที่รักษาความปลอดภัยนั้นไม่สามารถดำเนินการได้ เนื่องจากไม่มีข้อกำหนดไว้ในพระราชบัญญัติธุรกิจรักษาความปลอดภัย พ.ศ. 2558',
+        'imageUrl':
+            'https://gateway.we-builds.com/wb-py-media/uploads/smart-security\\20250228-111201-event 2.jpeg',
+        'createBy': 'admin',
+        'createDate': '20250228',
+        'updateBy': 'admin',
+        'updateDate': '20250228',
+        'view': 8734
+      },
+      // {
+      //   'code': 'E003',
+      //   'title': 'Event 3',
+      //   'imageUrl': 'https://via.placeholder.com/150',
+      // },
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-      future: widget.model, // function where you call your api
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        // AsyncSnapshot<Your object type>
-
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: model,
+      builder: (BuildContext context,
+          AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
+          if (snapshot.data!.isEmpty) {
             return Container(
               height: 200,
               alignment: Alignment.center,
@@ -60,12 +110,9 @@ class _EventCalendarListVertical extends State<EventCalendarListVertical> {
                 ),
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  // return Container(height: 300.0,color: Colors.red,margin: EdgeInsets.all(5.0),);
-                  return myCard(index, snapshot.data.length,
-                      snapshot.data[index], context);
-                  // return demoItem(snapshot.data[index]);
+                  return myCard(index, snapshot.data![index], context);
                 },
               ),
             );
@@ -77,57 +124,7 @@ class _EventCalendarListVertical extends State<EventCalendarListVertical> {
     );
   }
 
-  demoItem(dynamic model) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EventCalendarForm(
-                    urlGallery: widget.urlGallery,
-                    urlComment: widget.urlComment,
-                    model: model,
-                    url: widget.url,
-                    code: model['code'],
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(1),
-              decoration: new BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 0,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                borderRadius: new BorderRadius.circular(6.0),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Image.network(
-                  model['imageUrl'],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Container(
-          child: Center(
-            child: Image.asset('assets/images/bar.png'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  myCard(int index, int lastIndex, dynamic model, BuildContext context) {
+  Widget myCard(int index, Map<String, dynamic> model, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -144,23 +141,20 @@ class _EventCalendarListVertical extends State<EventCalendarListVertical> {
         );
       },
       child: Container(
-        margin: index % 2 == 0
-            ? EdgeInsets.only(bottom: 5.0, right: 5.0)
-            : EdgeInsets.only(bottom: 5.0, left: 5.0),
+        margin: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-          borderRadius: new BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(5),
           color: Colors.white,
         ),
         child: Column(
-          // alignment: Alignment.topCenter,
           children: [
             Expanded(
               child: Container(
                 height: 157.0,
                 decoration: BoxDecoration(
-                  borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(5.0),
-                    topRight: const Radius.circular(5.0),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5.0),
+                    topRight: Radius.circular(5.0),
                   ),
                   color: Colors.white.withAlpha(220),
                   image: DecorationImage(
@@ -171,42 +165,24 @@ class _EventCalendarListVertical extends State<EventCalendarListVertical> {
               ),
             ),
             Container(
-              // margin: EdgeInsets.only(top: 157.0),
               padding: EdgeInsets.all(5),
               alignment: Alignment.topLeft,
               height: 40,
               decoration: BoxDecoration(
-                borderRadius: new BorderRadius.only(
-                  bottomLeft: const Radius.circular(5.0),
-                  bottomRight: const Radius.circular(5.0),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(5.0),
+                  bottomRight: Radius.circular(5.0),
                 ),
                 color: Colors.black.withAlpha(10),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    model['title'],
-                    style: TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      // color: Colors.white,
-                      fontFamily: 'Sarabun',
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  // Text(
-                  //   dateStringToDate(model['createDate']),
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.normal,
-                  //     fontSize: 8,
-                  //     fontFamily: 'Sarabun',
-                  //     color: Colors.white,
-                  //   ),
-                  //   overflow: TextOverflow.ellipsis,
-                  // ),
-                ],
+              child: Text(
+                model['title'],
+                style: TextStyle(
+                  fontSize: 10,
+                  fontFamily: 'Sarabun',
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
           ],

@@ -129,13 +129,13 @@ class _EventCalendarList extends State<EventCalendarList> {
   _buildList() {
     return gridView = new EventCalendarListVertical(
       site: 'DDPM',
-      model: post('${eventCalendarApi}read', {
-        'skip': 0,
-        'limit': _limit,
-        'keySearch': keySearch,
-        'isHighlight': isHighlight,
-        'category': categorySelected
-      }),
+      // model: post('${eventCalendarApi}read', {
+      //   'skip': 0,
+      //   'limit': _limit,
+      //   'keySearch': keySearch,
+      //   'isHighlight': isHighlight,
+      //   'category': categorySelected
+      // }),
       urlGallery: eventCalendarGalleryApi,
       urlComment: eventCalendarCommentApi,
       url: '${eventCalendarApi}read',
@@ -149,13 +149,13 @@ class _EventCalendarList extends State<EventCalendarList> {
 
       gridView = EventCalendarListVertical(
         site: 'CIO',
-        model: post('${eventCalendarApi}read', {
-          'skip': 0,
-          'limit': _limit,
-          'keySearch': keySearch != null ? keySearch : '',
-          'isHighlight': isHighlight != null ? isHighlight : false,
-          'category': categorySelected != null ? categorySelected : ''
-        }),
+        // model: post('${eventCalendarApi}read', {
+        //   'skip': 0,
+        //   'limit': _limit,
+        //   'keySearch': keySearch != null ? keySearch : '',
+        //   'isHighlight': isHighlight != null ? isHighlight : false,
+        //   'category': categorySelected != null ? categorySelected : ''
+        // }),
         urlGallery: eventCalendarGalleryApi,
         urlComment: eventCalendarCommentApi,
         url: '${eventCalendarApi}read',

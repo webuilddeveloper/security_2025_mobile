@@ -52,12 +52,12 @@ class _GalleryViewState extends State<GalleryView> {
           Material(
             child: InkWell(
               onTap: () {
-                showCupertinoDialog(
-                  context: context,
-                  builder: (context) {
-                    return dataImage(0);
-                  },
-                );
+                // showCupertinoDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return dataImage(0);
+                //   },
+                // );
               },
               child: Container(
                 child: ClipRRect(

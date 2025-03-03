@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:security_2025_mobile_v3/component/material/check_avatar.dart';
 import 'package:security_2025_mobile_v3/pages/blank_page/blank_loading.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart';
@@ -20,6 +21,9 @@ class _MyQrCode extends State<MyQrCode> {
   late Future<dynamic> _futureProfile;
   String profileCode = '';
 
+  dynamic _model;
+  String _url = "";
+
   @override
   void initState() {
     _callRead();
@@ -27,11 +31,25 @@ class _MyQrCode extends State<MyQrCode> {
   }
 
   _callRead() async {
-    profileCode = (await storage.read(key: 'profileCode3'))!;
-    if (profileCode != '') {
-      setState(() {
-        _futureProfile = postDio(profileReadApi, {"code": profileCode});
-      });
+    profileCode = (await storage.read(key: 'profileCode3')) ?? '';
+    if (profileCode.isNotEmpty) {
+      _futureProfile = postDio(profileReadApi, {"code": profileCode});
+      final profile = await _futureProfile;
+
+      if (profile != null) {
+        setState(() {
+          _model = profile;
+          _url = "http://gateway.we-builds.com/security_information.html?id=001"
+              "&name=${_model['firstName']} ${_model['lastName']}"
+              "&image=${_model['imageUrl']}"
+              "&company=%E0%B8%9A%E0%B8%A3%E0%B8%B4%E0%B8%A9%E0%B8%B1%E0%B8%97+%E0%B9%80%E0%B8%AD+%E0%B8%9A%E0%B8%B5+%E0%B8%8B%E0%B8%B5+%E0%B8%88%E0%B8%B3%E0%B8%81%E0%B8%B1%E0%B8%94"
+              "&license_number=${_model['licenseNumber']}"
+              "&blood_type=A"
+              "&issue_date=2023-01-15"
+              "&expiry_date=2028-01-15"
+              "&position=%E0%B8%9E%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%A3%E0%B8%B1%E0%B8%81%E0%B8%A9%E0%B8%B2%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%9B%E0%B8%A5%E0%B8%AD%E0%B8%94%E0%B8%A0%E0%B8%B1%E0%B8%A2";
+        });
+      }
     }
   }
 
@@ -110,11 +128,30 @@ class _MyQrCode extends State<MyQrCode> {
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.05),
-                child: Image.asset(
-                  'assets/images/my_qr_code.png',
-                  color: Colors.black,
-                  height: MediaQuery.of(context).size.height * 0.3,
+                child: FutureBuilder<dynamic>(
+                  future: _futureProfile,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // หรือใส่ loading UI
+                    } else if (snapshot.hasError) {
+                      return Text('เกิดข้อผิดพลาดในการโหลด QR');
+                    } else if (_url.isEmpty) {
+                      return Text('ไม่พบข้อมูล QR Code');
+                    }
+                    return QrImageView(
+                      data: _url,
+                      size: MediaQuery.of(context).size.height * 0.3,
+                      backgroundColor: Colors.white,
+                      foregroundColor: Color(0XFFB03432),
+                    );
+                  },
                 ),
+
+                // Image.asset(
+                //   'assets/images/my_qr_code.png',
+                //   color: Colors.black,
+                //   height: MediaQuery.of(context).size.height * 0.3,
+                // ),
               ),
             ),
             Positioned(

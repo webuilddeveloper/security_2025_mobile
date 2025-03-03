@@ -32,8 +32,8 @@ class _KnowledgeList extends State<KnowledgeList> {
 
     gridView = new grid.KnowledgeListVertical(
       site: 'DDPM',
-      model: service
-          .post('${service.knowledgeApi}read', {'skip': 0, 'limit': _limit}),
+      // model: service
+      //     .post('${service.knowledgeApi}read', {'skip': 0, 'limit': _limit}),
     );
   }
 
@@ -48,12 +48,12 @@ class _KnowledgeList extends State<KnowledgeList> {
 
       gridView = new grid.KnowledgeListVertical(
         site: 'DDPM',
-        model: service.post('${service.knowledgeApi}read', {
-          'skip': 0,
-          'limit': _limit,
-          'category': category,
-          "keySearch": keySearch
-        }),
+        // model: service.post('${service.knowledgeApi}read', {
+        //   'skip': 0,
+        //   'limit': _limit,
+        //   'category': category,
+        //   "keySearch": keySearch
+        // }),
       );
     });
 
@@ -124,51 +124,51 @@ class _KnowledgeList extends State<KnowledgeList> {
             shrinkWrap: true,
             children: [
               SizedBox(height: 5),
-              CategorySelector(
-                model: service.postCategory(
-                  '${service.knowledgeCategoryApi}read',
-                  {'skip': 0, 'limit': 100},
-                ),
-                onChange: (String val) {
-                  setState(
-                    () {
-                      category = val;
-                      gridView = new grid.KnowledgeListVertical(
-                        site: 'DDPM',
-                        model: service.post('${service.knowledgeApi}read', {
-                          'skip': 0,
-                          'limit': _limit,
-                          'category': category,
-                          'keySearch': keySearch
-                        }),
-                      );
-                    },
-                  );
-                },
-                site: '',
-              ),
-              SizedBox(
-                height: 5.0,
-              ),
-              KeySearch(
-                show: hideSearch,
-                onKeySearchChange: (String val) {
-                  setState(
-                    () {
-                      keySearch = val;
-                      gridView = new grid.KnowledgeListVertical(
-                        site: 'DDPM',
-                        model: service.post('${service.knowledgeApi}read', {
-                          'skip': 0,
-                          'limit': _limit,
-                          'keySearch': keySearch,
-                          'category': category
-                        }),
-                      );
-                    },
-                  );
-                },
-              ),
+              // CategorySelector(
+              //   model: service.postCategory(
+              //     '${service.knowledgeCategoryApi}read',
+              //     {'skip': 0, 'limit': 100},
+              //   ),
+              //   onChange: (String val) {
+              //     setState(
+              //       () {
+              //         category = val;
+              //         gridView = new grid.KnowledgeListVertical(
+              //           site: 'DDPM',
+              //           // model: service.post('${service.knowledgeApi}read', {
+              //           //   'skip': 0,
+              //           //   'limit': _limit,
+              //           //   'category': category,
+              //           //   'keySearch': keySearch
+              //           // }),
+              //         );
+              //       },
+              //     );
+              //   },
+              //   site: '',
+              // ),
+              // SizedBox(
+              //   height: 5.0,
+              // ),
+              // KeySearch(
+              //   show: hideSearch,
+              //   onKeySearchChange: (String val) {
+              //     setState(
+              //       () {
+              //         keySearch = val;
+              //         gridView = new grid.KnowledgeListVertical(
+              //           site: 'DDPM',
+              //           // model: service.post('${service.knowledgeApi}read', {
+              //           //   'skip': 0,
+              //           //   'limit': _limit,
+              //           //   'keySearch': keySearch,
+              //           //   'category': category
+              //           // }),
+              //         );
+              //       },
+              //     );
+              //   },
+              // ),
               SizedBox(
                 height: 10.0,
               ),
