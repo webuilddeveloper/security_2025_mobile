@@ -129,18 +129,6 @@ class _HomePageState extends State<HomePage> {
 
   _buildBackground() {
     return Container(
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //     colors: [
-      //       Color(0xFFFF7900),
-      //       Color(0xFFFF7900),
-      //       Color(0xFFFFFFFF),
-      //     ],
-      //     begin: Alignment.topCenter,
-      //     // end: new Alignment(1, 0.0),
-      //     end: Alignment.bottomCenter,
-      //   ),
-      // ),
       child: _buildNotificationListener(),
     );
   }
@@ -1144,6 +1132,7 @@ class _HomePageState extends State<HomePage> {
 
   _buildNews() {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       alignment: Alignment.centerLeft,
       color: Colors.transparent,
       child: Column(
@@ -1152,7 +1141,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'ข่าวประชาสัมพันธ์',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -1172,175 +1161,169 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 child: Container(
-                  padding: EdgeInsets.only(right: 10.0),
-                  margin: EdgeInsets.only(bottom: 5.0, top: 10.0),
-                  child: Text(
-                    'ดูทั้งหมด',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontFamily: 'Kanit',
-                      fontWeight: FontWeight.w400,
-                      color: Color(0XFFB03432),
-                      decoration: TextDecoration.underline,
-                    ),
+                  // padding: EdgeInsets.symmetric(ho: 10.0),
+                  // margin: EdgeInsets.only(bottom: 5.0, top: 10.0),
+                  child: const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'ดูทั้งหมด',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.w400,
+                          color: Color(0XFF27544F),
+                          // decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 17,
+                        color: Color(0XFF27544F),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ],
+          ),
+          const SizedBox(
+            height: 10,
           ),
           FutureBuilder<dynamic>(
             future: _futureNews,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 print("กำลังรับข้อมูลจาก FutureBuilder");
-                if (_newsList.isEmpty) {
+                // ลบเงื่อนไขการเช็ค _newsList.isEmpty เพื่อให้ข้อมูลอัพเดทเสมอ
+                if (snapshot.data != null && snapshot.data.length > 0) {
                   _newsList = snapshot.data;
                   print("รับข้อมูล ${_newsList.length} รายการ");
                 }
-
                 return Center(
-                  child: Container(
-                    child: Wrap(
-                      spacing: 15.0,
-                      runSpacing: 15.0,
-                      children: _newsList.map<Widget>(
-                        (data) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NewsForm(
-                                    url: data['url'] ?? '',
-                                    code: data['code'] ?? '',
-                                    model: data ?? '',
-                                    urlComment: newsApi,
-                                    urlGallery: newsGalleryApi,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.43,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.transparent,
-                                    spreadRadius: 0,
-                                    blurRadius: 7,
-                                    offset: Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(14),
-                                      topRight: Radius.circular(14),
-                                    ),
-                                    // child: Container(
-                                    //   decoration: BoxDecoration(
-                                    //     borderRadius: BorderRadius.only(
-                                    //       topLeft: Radius.circular(14),
-                                    //       topRight: Radius.circular(14),
-                                    //     ),
-                                    //     color: Color(0xFFFFFFFF),
-                                    //   ),
-                                    //   constraints: BoxConstraints(
-                                    //     minHeight: 200,
-                                    //     maxHeight: 200,
-                                    //     minWidth: double.infinity,
-                                    //   ),
-                                    //   child: data['imageUrl'] != null
-                                    //       ? Image.network(
-                                    //           '${data['imageUrl']}',
-                                    //           fit: BoxFit.contain,
-                                    //         )
-                                    //       : BlankLoading(
-                                    //           height: 200,
-                                    //           width: null,
-                                    //         ),
-                                    // ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(14),
-                                        ),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.1),
-                                            blurRadius: 5,
-                                            spreadRadius: 2,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      constraints: BoxConstraints(
-                                        minHeight: 200,
-                                        maxHeight: 200,
-                                        minWidth: double.infinity,
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(14),
-                                        ),
-                                        child: data['imageUrl'] != null &&
-                                                data['imageUrl']
-                                                    .toString()
-                                                    .isNotEmpty
-                                            ? Image.network(
-                                                data['imageUrl'],
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                                height: 200,
-                                                errorBuilder: (context, error,
-                                                        stackTrace) =>
-                                                    Icon(
-                                                  Icons.broken_image,
-                                                  size: 50,
-                                                  color: Colors.grey,
-                                                ),
-                                              )
-                                            : BlankLoading(
-                                                height: 200,
-                                                width: null,
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(14),
-                                        bottomRight: Radius.circular(14),
-                                      ),
-                                      color: Color(0xFFFFFFFF),
-                                    ),
-                                    padding: EdgeInsets.all(5.0),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '${data['title']}',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: 'Sarabun',
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.7,
+                      crossAxisSpacing: 15.0,
+                      mainAxisSpacing: 15.0,
+                    ),
+                    itemCount: _newsList.length,
+                    itemBuilder: (context, index) {
+                      var data = _newsList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewsForm(
+                                url: data['url'] ?? '',
+                                code: data['code'] ?? '',
+                                model: data ?? '',
+                                urlComment: newsApi,
+                                urlGallery: newsGalleryApi,
                               ),
                             ),
                           );
                         },
-                      ).toList(),
-                    ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.transparent,
+                                spreadRadius: 0,
+                                blurRadius: 7,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(14),
+                                    topRight: Radius.circular(14),
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(14),
+                                      ),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 5,
+                                          spreadRadius: 2,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    width: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(14),
+                                      ),
+                                      child: data['imageUrl'] != null &&
+                                              data['imageUrl']
+                                                  .toString()
+                                                  .isNotEmpty
+                                          ? Image.network(
+                                              data['imageUrl'],
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  const Icon(
+                                                Icons.broken_image,
+                                                size: 50,
+                                                color: Colors.grey,
+                                              ),
+                                            )
+                                          : BlankLoading(
+                                              height: double.infinity,
+                                              width: double.infinity,
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(14),
+                                      bottomRight: Radius.circular(14),
+                                    ),
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                  padding: const EdgeInsets.all(5.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    '${data['title']}',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontFamily: 'Sarabun',
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
               } else if (snapshot.hasError) {
@@ -1349,7 +1332,7 @@ class _HomePageState extends State<HomePage> {
                   height: null,
                 );
               } else {
-                return Center(
+                return const Center(
                   child: Text(
                     'ไม่พบข้อมูล',
                     style: TextStyle(
@@ -1980,7 +1963,7 @@ class _HomePageState extends State<HomePage> {
   void _onRefresh() async {
     print("เริ่มรีเฟรช");
     _currentNewsPage = 0;
-    _newsList = [];
+    _hasMoreNews = true; // รีเซ็ตค่านี้เพื่อให้สามารถโหลดเพิ่มได้
 
     try {
       var newsData = await postDio('${newsApi}read', {
@@ -1990,15 +1973,19 @@ class _HomePageState extends State<HomePage> {
       });
 
       setState(() {
-        _newsList = newsData;
+        _newsList = newsData ?? []; // ป้องกันกรณี null
         print("รีเฟรชข้อมูลเสร็จสิ้น: ${_newsList.length} รายการ");
       });
+
+      // ตรวจสอบว่ายังมีข้อมูลเพิ่มเติมหรือไม่
+      if (newsData == null || newsData.length < _newsLimit) {
+        _hasMoreNews = false;
+      }
     } catch (e) {
       print("เกิดข้อผิดพลาดในการรีเฟรช: $e");
     }
 
     _refreshController.refreshCompleted();
-    _hasMoreNews = true;
   }
 
   Future<void> _getLocation() async {
