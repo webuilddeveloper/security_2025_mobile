@@ -109,9 +109,9 @@ class _KnowledgeList extends State<KnowledgeList> {
           enablePullDown: false,
           enablePullUp: true,
           footer: ClassicFooter(
-            loadingText: ' ',
-            canLoadingText: ' ',
-            idleText: ' ',
+            loadingText: '',
+            canLoadingText: '',
+            idleText: '',
             idleIcon: Icon(
               Icons.arrow_upward,
               color: Colors.transparent,
@@ -169,9 +169,7 @@ class _KnowledgeList extends State<KnowledgeList> {
               //     );
               //   },
               // ),
-              SizedBox(
-                height: 10.0,
-              ),
+              SizedBox(height: 10.0),
               gridView,
               // Expanded(
               //   flex: 1,

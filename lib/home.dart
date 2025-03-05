@@ -159,11 +159,11 @@ class _HomePageState extends State<HomePage> {
 
   _buildMenu(context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Container(
-          color: Color(0XFFF3F5F5),
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
+      child: Padding(
+        padding: EdgeInsets.only(right: 15, left: 15, top: 30),
+        child: SingleChildScrollView(
+          child: Container(
+            color: Color(0XFFF3F5F5),
             child: Column(
               children: [
                 _buildProfile(),
@@ -1132,7 +1132,7 @@ class _HomePageState extends State<HomePage> {
 
   _buildNews() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      // padding: const EdgeInsets.symmetric(horizontal: 20.0),
       alignment: Alignment.centerLeft,
       color: Colors.transparent,
       child: Column(
