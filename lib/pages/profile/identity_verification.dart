@@ -30,26 +30,26 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   final _formOrganizationKey = GlobalKey<FormState>();
 
   List<String> _itemPrefixName = ['นาย', 'นาง', 'นางสาว']; // Option 2
-  late String _selectedPrefixName;
+  late String _selectedPrefixName = '';
 
   List<dynamic> _itemSex = [
     {'title': 'ชาย', 'code': 'ชาย'},
     {'title': 'หญิง', 'code': 'หญิง'},
     {'title': 'ไม่ระบุเพศ', 'code': 'ไม่ระบุเพศ'}
   ];
-  late String _selectedSex;
+  late String _selectedSex = '';
 
   List<dynamic> _itemProvince = [];
-  late String _selectedProvince;
+  late String _selectedProvince = '';
 
   List<dynamic> _itemDistrict = [];
-  late String _selectedDistrict;
+  late String _selectedDistrict = '';
 
   List<dynamic> _itemSubDistrict = [];
-  late String _selectedSubDistrict;
+  late String _selectedSubDistrict = '';
 
   List<dynamic> _itemPostalCode = [];
-  late String _selectedPostalCode;
+  late String _selectedPostalCode = '';
 
   List<dynamic> _itemOrganizationLv0 = [];
 
@@ -126,6 +126,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   @override
   void initState() {
     // readStorage();
+    futureModel = getUser();
     getUser();
     // getProvince();
     getOrganizationLv0();
@@ -2994,8 +2995,33 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
           );
         else
           return Scaffold(
-            appBar: header(context, goBack,
-                title: 'ข้อมูลสมาชิก', rightButton: null),
+            // appBar: header(context, goBack,
+            //     title: 'ข้อมูลสมาชิก', rightButton: null),
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              title: Center(
+                child: Text(
+                  'ข้อมูลสมาชิก',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  color: Colors.transparent,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+              backgroundColor: Color(0XFFB03432),
+            ),
             backgroundColor: Color(0xFFFFFFFF),
             body: Container(
               child: ListView(

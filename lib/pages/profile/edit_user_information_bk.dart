@@ -169,8 +169,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           width: 90.0,
                           height: 90.0,
                           margin: EdgeInsets.only(top: 30.0),
-                          padding: EdgeInsets.all(
-                              _imageUrl != '' ? 0.0 : 5.0),
+                          padding: EdgeInsets.all(_imageUrl != '' ? 0.0 : 5.0),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(45),
                               color: Colors.white70),
@@ -181,10 +180,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                             child: _imageUrl != ''
                                 ? CircleAvatar(
                                     backgroundColor: Colors.black,
-                                    backgroundImage:
-                                        _imageUrl != ''
-                                            ? NetworkImage(_imageUrl)
-                                            : null,
+                                    backgroundImage: _imageUrl != ''
+                                        ? NetworkImage(_imageUrl)
+                                        : null,
                                   )
                                 : Container(
                                     padding: EdgeInsets.all(10.0),

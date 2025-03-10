@@ -21,7 +21,7 @@ class EditUserInformationPage extends StatefulWidget {
 class _EditUserInformationPageState extends State<EditUserInformationPage> {
   final storage = new FlutterSecureStorage();
 
-  late String _imageUrl;
+  late String _imageUrl = '';
   late String _code;
 
   final _formKey = GlobalKey<FormState>();
@@ -1021,7 +1021,32 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, goBack, title: 'แก้ไขข้อมูล', rightButton: null),
+      // appBar: header(context, goBack, title: 'แก้ไขข้อมูล', rightButton: null),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Center(
+          child: Text(
+            'แก้ไขข้อมูล',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        backgroundColor: Color(0XFFB03432),
+      ),
       backgroundColor: Color(0xFFF5F8FB),
       body: FutureBuilder<dynamic>(
         future: futureModel,
