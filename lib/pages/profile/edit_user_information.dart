@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:security_2025_mobile_v3/home_v2.dart';
+import 'package:security_2025_mobile_v3/menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
@@ -332,7 +332,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (context) => HomePageV2(),
+                        builder: (context) => const Menu(pageIndex: 0),
                       ),
                       (Route<dynamic> route) => false,
                     );

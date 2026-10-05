@@ -1,10 +1,11 @@
-import 'dart:convert';
+import 'event_utils.dart';
+// import 'dart:convert'; // Enable with the API below.
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:security_2025_mobile_v3/component/key_search.dart';
 import 'package:security_2025_mobile_v3/pages/event_calendar/event_calendar_list_vertical.dart';
 import 'package:security_2025_mobile_v3/shared/api_provider.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http; // Enable with the API below.
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class EventCalendarList extends StatefulWidget {
@@ -36,6 +37,12 @@ class _EventCalendarList extends State<EventCalendarList> {
     //     post('${eventCalendarCategoryApi}read', {'skip': 0, 'limit': 100});
     _read();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
   }
 
   @override
@@ -96,39 +103,43 @@ class _EventCalendarList extends State<EventCalendarList> {
   }
 
   _read() async {
-    var body = json.encode({
-      "permission": "all",
-      "skip": 0,
-      "limit": 999 // integer value type
-    });
-    var response = await http.post(Uri.parse(eventCalendarCategoryApi + 'read'),
-        body: body,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-
-    var data = json.decode(response.body);
-    setState(() {
-      category = data['objectData'];
-    });
-
-    if (category.length > 0) {
-      for (int i = 0; i <= category.length - 1; i++) {
-        var res = post('${eventCalendarApi}read', {
-          'skip': 0,
-          'limit': 100,
-          'category': category[i]['code'],
-          'keySearch': keySearch
-        });
-        listData.add(res);
-      }
-    }
+    category = eventCalendarMockCategories;
+    // TODO: Enable API when backend is ready; replace mock assignment above.
+    // var body = json.encode({
+    //   "permission": "all",
+    //   "skip": 0,
+    //   "limit": 999 // integer value type
+    // });
+    // var response = await http.post(Uri.parse(eventCalendarCategoryApi + 'read'),
+    //     body: body,
+    //     headers: {
+    //       "Accept": "application/json",
+    //       "Content-Type": "application/json"
+    //     });
+    //
+    // var data = json.decode(response.body);
+    // setState(() {
+    //   category = data['objectData'];
+    // });
+    //
+    // if (category.length > 0) {
+    //   for (int i = 0; i <= category.length - 1; i++) {
+    //     var res = post('${eventCalendarApi}read', {
+    //       'skip': 0,
+    //       'limit': 100,
+    //       'category': category[i]['code'],
+    //       'keySearch': keySearch
+    //     });
+    //     listData.add(res);
+    //   }
+    // }
   }
 
   _buildList() {
     return gridView = new EventCalendarListVertical(
       site: 'DDPM',
+      keySearch: keySearch,
+      category: categorySelected,
       // model: post('${eventCalendarApi}read', {
       //   'skip': 0,
       //   'limit': _limit,
@@ -149,6 +160,8 @@ class _EventCalendarList extends State<EventCalendarList> {
 
       gridView = EventCalendarListVertical(
         site: 'CIO',
+        keySearch: keySearch,
+        category: categorySelected,
         // model: post('${eventCalendarApi}read', {
         //   'skip': 0,
         //   'limit': _limit,
@@ -165,15 +178,18 @@ class _EventCalendarList extends State<EventCalendarList> {
 
     await Future.delayed(Duration(milliseconds: 1000));
 
-    _refreshController.loadComplete();
+    if (!mounted) return;
+    _refreshController.loadNoData();
   }
 
   _buildCategory() {
     return FutureBuilder<dynamic>(
-      future: postCategory(
-        '${eventCalendarCategoryApi}read',
-        {'skip': 0, 'limit': 100},
-      ), // function where you call your api
+      future: Future.value(category),
+      // TODO: Enable API when backend is ready.
+      // future: postCategory(
+      // '${eventCalendarCategoryApi}read',
+      // {'skip': 0, 'limit': 100},
+      // ), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
 

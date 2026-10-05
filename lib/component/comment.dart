@@ -15,9 +15,11 @@ class Comment extends StatefulWidget {
       required this.code,
       required this.url,
       required this.model,
-      required this.limit})
+      required this.limit,
+      this.useMockData = false})
       : super(key: key);
 
+  final bool useMockData;
   final String code;
   final String url;
   Future<dynamic> model;
@@ -47,7 +49,7 @@ class _Comment extends State<Comment> {
   void initState() {
     storage = FlutterSecureStorage();
 
-    getUser();
+    if (!widget.useMockData) getUser();
     super.initState();
   }
 
@@ -315,6 +317,24 @@ class _Comment extends State<Comment> {
 
   sendComment() async {
     if (txtDescription.text != '') {
+      if (widget.useMockData) {
+        final comments = List<dynamic>.from(await widget.model);
+        if (!mounted) return;
+        final now = DateTime.now().toUtc().add(const Duration(hours: 7));
+        comments.insert(0, {
+          'createBy': 'ผู้ใช้งานตัวอย่าง',
+          'imageUrlCreateBy': '',
+          'description': txtDescription.text,
+          'createDate':
+              '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}',
+        });
+        setState(() {
+          widget.model = Future.value(comments);
+          txtDescription.clear();
+        });
+        unfocus(context);
+        return;
+      }
       postAny('${widget.url}create', {
         'createBy': username,
         'imageUrlCreateBy': imageUrlCreateBy,

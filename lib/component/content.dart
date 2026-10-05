@@ -16,8 +16,10 @@ class Content extends StatefulWidget {
     this.model,
     required this.urlGallery,
     required this.pathShare,
+    this.useMockData = false,
   }) : super(key: key);
 
+  final bool useMockData;
   final String code;
   final String url;
   final dynamic model;
@@ -38,6 +40,11 @@ class _Content extends State<Content> {
   @override
   void initState() {
     super.initState();
+    if (widget.useMockData) {
+      // Event calendar mock mode uses the selected record without backend calls.
+      _futureModel = Future.value([widget.model]);
+      return;
+    }
     sharedApi();
     _futureModel =
         post(widget.url, {'skip': 0, 'limit': 1, 'code': widget.code});

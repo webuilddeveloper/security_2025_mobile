@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:security_2025_mobile_v3/pages/Complaint.dart';
 import 'package:security_2025_mobile_v3/pages/check%20_information.dart';
@@ -1244,7 +1245,7 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             children: [
                               Expanded(
-                                flex: 4,
+                                flex: 5,
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(14),
@@ -1274,18 +1275,47 @@ class _HomePageState extends State<HomePage> {
                                               data['imageUrl']
                                                   .toString()
                                                   .isNotEmpty
-                                          ? Image.network(
-                                              data['imageUrl'],
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              errorBuilder: (context, error,
-                                                      stackTrace) =>
-                                                  const Icon(
-                                                Icons.broken_image,
-                                                size: 50,
-                                                color: Colors.grey,
-                                              ),
+                                          ? Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                // Background รูปเดียวกัน + Blur
+                                                Positioned.fill(
+                                                  child: ImageFiltered(
+                                                    imageFilter:
+                                                        ImageFilter.blur(
+                                                      sigmaX: 2,
+                                                      sigmaY: 2,
+                                                    ),
+                                                    child: Image.network(
+                                                      data['imageUrl'],
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // Overlay ให้พื้นหลังมืดลงเล็กน้อย
+                                                Positioned.fill(
+                                                  child: Container(
+                                                    color: Colors.black
+                                                        .withOpacity(0.15),
+                                                  ),
+                                                ),
+
+                                                // รูปหลักตรงกลาง
+                                                Image.network(
+                                                  data['imageUrl'],
+                                                  fit: BoxFit.contain,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      const Icon(
+                                                    Icons.broken_image,
+                                                    size: 50,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ],
                                             )
                                           : BlankLoading(
                                               height: double.infinity,
@@ -1296,7 +1326,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Expanded(
-                                flex: 1,
+                                flex: 2,
                                 child: Container(
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.only(

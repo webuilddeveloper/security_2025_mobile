@@ -32,6 +32,8 @@ class _NewsList extends State<NewsList> {
   @override
   void initState() {
     super.initState();
+    print('newsList initState');
+    print('${newsApi}read');
 
     news = new NewsListVertical(
       site: "DDPM",

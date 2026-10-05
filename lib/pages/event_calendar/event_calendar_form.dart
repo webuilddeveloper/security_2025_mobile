@@ -40,15 +40,19 @@ class _EventCalendarForm extends State<EventCalendarForm> {
       comment = Comment(
         code: widget.code,
         url: eventCalendarCommentApi,
-        model: post('${eventCalendarCommentApi}read',
-            {'skip': 0, 'limit': _limit, 'code': widget.code}),
+        useMockData: true,
+        model: comment.model,
+        // TODO: Enable API when backend is ready and remove useMockData.
+        // model: post('${eventCalendarCommentApi}read',
+        //     {'skip': 0, 'limit': _limit, 'code': widget.code}),
         limit: _limit,
       );
     });
 
     await Future.delayed(Duration(milliseconds: 1000));
 
-    _refreshController.loadComplete();
+    if (!mounted) return;
+    _refreshController.loadNoData();
   }
 
   @override
@@ -60,12 +64,21 @@ class _EventCalendarForm extends State<EventCalendarForm> {
     comment = Comment(
       code: widget.code,
       url: eventCalendarCommentApi,
-      model: post('${eventCalendarCommentApi}read',
-          {'skip': 0, 'limit': _limit, 'code': widget.code}),
+      useMockData: true,
+      model: Future.value(<dynamic>[]),
+      // TODO: Enable API when backend is ready and remove useMockData.
+      // model: post('${eventCalendarCommentApi}read',
+      //     {'skip': 0, 'limit': _limit, 'code': widget.code}),
       limit: _limit,
     );
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
   }
 
   @override
@@ -101,6 +114,8 @@ class _EventCalendarForm extends State<EventCalendarForm> {
                 // physics: ClampingScrollPhysics(),
                 children: [
                   Content(
+                    // TODO: Remove useMockData to restore content/gallery/share API calls.
+                    useMockData: true,
                     pathShare: 'content/eventCalendar/',
                     code: widget.code,
                     url: widget.url,

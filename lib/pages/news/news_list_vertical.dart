@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' show ImageFilter;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:security_2025_mobile_v3/pages/blank_page/blank_data.dart';
@@ -178,9 +179,29 @@ class _NewsListVertical extends State<NewsListVertical> {
                                     ),
                                     child:
                                         snapshot.data[index]['imageUrl'] != null
-                                            ? Image.network(
-                                                '${snapshot.data[index]['imageUrl']}',
-                                                fit: BoxFit.cover,
+                                            ? ClipRect(
+                                                child: Stack(
+                                                  fit: StackFit.expand,
+                                                  children: [
+                                                    ImageFiltered(
+                                                      imageFilter:
+                                                          ImageFilter.blur(
+                                                        sigmaX: 15,
+                                                        sigmaY: 15,
+                                                        tileMode: TileMode.clamp,
+                                                      ),
+                                                      child: Image.network(
+                                                        '${snapshot.data[index]['imageUrl']}',
+                                                        fit: BoxFit.cover,
+                                                        excludeFromSemantics: true,
+                                                      ),
+                                                    ),
+                                                    Image.network(
+                                                      '${snapshot.data[index]['imageUrl']}',
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ],
+                                                ),
                                               )
                                             : BlankLoading(
                                                 height: 200,

@@ -1,5 +1,7 @@
+import 'dart:ui' show ImageFilter;
+import 'package:security_2025_mobile_v3/pages/blank_page/blank_loading.dart';
 import 'dart:collection';
-import 'dart:convert';
+// import 'dart:convert'; // Enable with the API below.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -18,14 +20,14 @@ class _CalendarPageState extends State<CalendarPage>
     with TickerProviderStateMixin {
   final storage = new FlutterSecureStorage();
   late ValueNotifier<List<dynamic>> _selectedEvents;
-  late Map<DateTime, List> _events;
+  // late Map<DateTime, List> _events; // Enable with the API below.
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
-  DateTime _focusedDay = DateTime.now();
+  DateTime _focusedDay = kToday;
   late DateTime _selectedDay;
-  late DateTime _rangeStart;
-  late DateTime _rangeEnd;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   late LinkedHashMap<DateTime, List<dynamic>> model;
   var markData = [];
@@ -37,7 +39,7 @@ class _CalendarPageState extends State<CalendarPage>
   void initState() {
     super.initState();
     model = kEvents;
-    _selectedDay = DateTime.now();
+    _selectedDay = kToday;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay));
 
     _animationController = AnimationController(
@@ -51,45 +53,49 @@ class _CalendarPageState extends State<CalendarPage>
   @override
   void dispose() {
     _selectedEvents.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   getMarkerEvent() async {
-    var objectData = [];
-    var value = await storage.read(key: 'dataUserLoginDDPM');
-    var data = json.decode(value!);
-    final result = await postObjectData("m/EventCalendar/mark/read2", {
-      "year": DateTime.now().year,
-      "organization":
-          data['countUnit'] != '' ? json.decode(data['countUnit']) : [],
-    });
-    if (result['status'] == 'S') {
-      objectData = result['objectData'];
-
-      _events = {};
-
-      for (int i = 0; i < objectData.length; i++) {
-        if (objectData[i]['items'].length > 0) {
-          markData.add(objectData[i]);
-        }
-      }
-
-      itemevent = Map.fromIterable(
-        markData,
-        key: (item) => DateTime.parse(item['date']),
-        value: (item) => item['items'],
-      );
-
-      var mainEvent = LinkedHashMap<DateTime, List<dynamic>>(
-        equals: isSameDay,
-        hashCode: getHashCode,
-      )..addAll(itemevent);
-      print('value --> ');
-
-      setState(() {
-        model = mainEvent;
-      });
-    }
+    model = kEvents;
+    _selectedEvents.value = _getEventsForDay(_selectedDay);
+    // TODO: Enable API when backend is ready; replace mock assignment above.
+    // var objectData = [];
+    // var value = await storage.read(key: 'dataUserLoginDDPM');
+    // var data = json.decode(value!);
+    // final result = await postObjectData("m/EventCalendar/mark/read2", {
+    //   "year": DateTime.now().year,
+    //   "organization":
+    //       data['countUnit'] != '' ? json.decode(data['countUnit']) : [],
+    // });
+    // if (result['status'] == 'S') {
+    //   objectData = result['objectData'];
+    //
+    //   _events = {};
+    //
+    //   for (int i = 0; i < objectData.length; i++) {
+    //     if (objectData[i]['items'].length > 0) {
+    //       markData.add(objectData[i]);
+    //     }
+    //   }
+    //
+    //   itemevent = Map.fromIterable(
+    //     markData,
+    //     key: (item) => DateTime.parse(item['date']),
+    //     value: (item) => item['items'],
+    //   );
+    //
+    //   var mainEvent = LinkedHashMap<DateTime, List<dynamic>>(
+    //     equals: isSameDay,
+    //     hashCode: getHashCode,
+    //   )..addAll(itemevent);
+    //   print('value --> ');
+    //
+    //   setState(() {
+    //     model = mainEvent;
+    //   });
+    // }
   }
 
   List<dynamic> _getEventsForDay(DateTime day) {
@@ -105,8 +111,8 @@ class _CalendarPageState extends State<CalendarPage>
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart; // Important to clean those
-        _rangeEnd;
+        _rangeStart = null;
+        _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
 
@@ -228,9 +234,53 @@ class _CalendarPageState extends State<CalendarPage>
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5),
-                            child: Image.network(
-                              '${value[index]['imageUrl']}',
-                              fit: BoxFit.cover,
+                            child: SizedBox(
+                              width: 94,
+                              height: 94,
+                              child: value[index]['imageUrl'] != null &&
+                                      value[index]['imageUrl']
+                                          .toString()
+                                          .isNotEmpty
+                                  ? Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Positioned.fill(
+                                          child: ImageFiltered(
+                                            imageFilter: ImageFilter.blur(
+                                                sigmaX: 2, sigmaY: 2),
+                                            child: Image.network(
+                                              value[index]['imageUrl'],
+                                              fit: BoxFit.cover,
+                                              excludeFromSemantics: true,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  const SizedBox.shrink(),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned.fill(
+                                          child: Container(
+                                              color: Colors.black
+                                                  .withValues(alpha: 0.15)),
+                                        ),
+                                        Image.network(
+                                          value[index]['imageUrl'],
+                                          fit: BoxFit.contain,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          errorBuilder:
+                                              (context, error, stackTrace) =>
+                                                  const Icon(
+                                            Icons.broken_image,
+                                            size: 50,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : BlankLoading(
+                                      height: double.infinity,
+                                      width: double.infinity),
                             ),
                           ),
                           SizedBox(width: 10),
